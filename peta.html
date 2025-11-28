@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peta Desa - GEODESA.ID</title>
+    
+    <!-- 添加Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 添加Leaflet地图库 -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        /* ===================================================================
+           A. CSS GLOBAL & RESET
+           =================================================================== */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        /* ===================================================================
+           B. HEADER (NAVBAR)
+           =================================================================== */
+        .main-header {
+            background-color: #38c172; /* Hijau Utama */
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            position: relative;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo {
+            font-size: 1.5em;
+            font-weight: 800;
+            color: white; 
+            margin-right: 20px;
+        }
+
+        .logo-dot {
+            color: #f99d50; /* Oranye */
+        }
+
+        .contact-info {
+            font-size: 0.9em;
+            color: #eee;
+            display: none;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .search-box-header {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            display: flex;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .search-box-header input {
+            border: none;
+            padding: 8px 15px;
+            background: transparent;
+            color: white;
+            flex-grow: 1;
+            outline: none;
+        }
+        
+        .search-box-header input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .search-box-header button {
+            background: transparent;
+            color: white;
+            border: none;
+            padding: 0 15px;
+            cursor: pointer;
+        }
+        
+        .btn-pengaduan {
+            background-color: #f99d50; /* Tombol Oranye */
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-pengaduan:hover {
+            background-color: #e68a40;
+        }
+
+        /* Hamburger Menu Styling */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            z-index: 1000;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .main-nav ul {
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-nav li a {
+            padding: 10px 15px;
+            display: block;
+            font-weight: 600;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        
+        .main-nav li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===================================================================
+           C. MAIN CONTENT
+           =================================================================== */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .page-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #f99d50;
+        }
+        
+        .page-header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        /* ===================================================================
+           D. MAP SECTION
+           =================================================================== */
+        .map-section {
+            margin-bottom: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .map-controls {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .control-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .control-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .control-group select,
+        .control-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        .map-search {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .map-search input {
+            border-radius: 5px 0 0 5px;
+            border-right: none;
+        }
+        
+        .map-search button {
+            background-color: #38c172;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+        
+        .map-container {
+            height: 500px;
+            position: relative;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+            border-radius: 0 0 10px 10px;
+        }
+        
+        /* ===================================================================
+           E. LOCATION CATEGORIES
+           =================================================================== */
+        .categories-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #f99d50;
+        }
+        
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .category-tab {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .category-tab:hover {
+            background-color: #e9ecef;
+        }
+        
+        .category-tab.active {
+            background-color: #38c172;
+            color: white;
+            border-color: #38c172;
+        }
+        
+        .category-icon {
+            font-size: 1.2em;
+        }
+        
+        /* ===================================================================
+           F. LOCATION GRID
+           =================================================================== */
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .location-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .location-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .location-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .location-content {
+            padding: 15px;
+        }
+        
+        .location-category {
+            font-size: 0.85em;
+            color: #38c172;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .location-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .location-description {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        
+        .location-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .location-distance {
+            font-size: 0.85em;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .location-distance i {
+            color: #f99d50;
+        }
+        
+        .location-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-directions {
+            background-color: #38c172;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-directions:hover {
+            background-color: #2da85f;
+        }
+        
+        .btn-detail {
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-detail:hover {
+            background-color: #e9ecef;
+            border-color: #ccc;
+        }
+        
+        /* ===================================================================
+           G. LOCATION MODAL
+           =================================================================== */
+        .location-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 0;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+            z-index: 1001;
+        }
+        
+        .modal-close:hover {
+            color: #333;
+        }
+        
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .modal-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .modal-category {
+            font-size: 1em;
+            color: #38c172;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .modal-description {
+            font-size: 1em;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .modal-details {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .modal-details h4 {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .detail-item {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            width: 120px;
+            color: #333;
+        }
+        
+        .detail-value {
+            color: #666;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn-primary {
+            background-color: #38c172;
+            color: white;
+        }
+        
+        .modal-btn-primary:hover {
+            background-color: #2da85f;
+        }
+        
+        .modal-btn-secondary {
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .modal-btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* ===================================================================
+           H. FOOTER
+           =================================================================== */
+        .main-footer {
+            background-color: #4a4a4a;
+            color: white;
+            padding: 40px 20px 10px;
+            margin-top: 50px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
+        }
+
+        .footer-col {
+            padding: 0 10px;
+        }
+
+        .brand-info { flex-basis: 35%; }
+        .menu-links, .contact-info { flex-basis: 25%; }
+
+        .footer-logo-text {
+            font-size: 2em;
+            font-weight: 800;
+            color: #f99d50;
+            margin-bottom: 5px;
+        }
+        
+        .footer-logo-text .dot-footer { color: white; }
+
+        .brand-text { font-size: 0.9em; color: #ccc; margin-bottom: 10px; }
+
+        .playstore-badge { width: 150px; height: auto; display: block; margin-bottom: 20px; }
+
+        .footer-col h3 {
+            font-size: 1.1em; font-weight: bold; color: white; margin-bottom: 15px;
+            border-bottom: 3px solid #f99d50; padding-bottom: 5px; display: inline-block;
+        }
+
+        .menu-links ul { list-style: none; padding: 0; }
+        .menu-links li { margin-bottom: 8px; }
+        
+        .menu-links a { text-decoration: none; color: #ccc; font-size: 0.9em; transition: color 0.3s; }
+        .menu-links a:hover { color: #f99d50; }
+
+        .list-icon { margin-right: 8px; color: #38c172; }
+
+        .social-icons-footer { margin-bottom: 15px; display: flex; gap: 10px; }
+
+        .social-icons-footer a {
+            display: inline-flex; justify-content: center; align-items: center; width: 30px; height: 30px;
+            background-color: #38c172; color: white; border-radius: 4px; font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .social-icons-footer a:hover {
+            background-color: #2da85f;
+        }
+
+        .contact-detail { font-size: 0.9em; color: #ccc; margin-bottom: 5px; }
+
+        .detail-label { font-weight: bold; color: white; margin-right: 5px; }
+
+        .copyright-info {
+            font-size: 0.7em; color: #888; margin-top: 20px; text-align: center; width: 100%;
+        }
+
+        .geodesa-link { color: #f99d50; font-weight: bold; }
+        
+        /* ===================================================================
+           I. RESPONSIVE DESIGN
+           =================================================================== */
+        @media (max-width: 768px) {
+            /* Header adjustments */
+            .main-header {
+                padding: 10px 15px;
+            }
+            
+            .header-top {
+                flex-wrap: wrap;
+            }
+            
+            .header-left {
+                width: 100%;
+                justify-content: space-between;
+                margin-bottom: 10px;
+            }
+            
+            .header-logo {
+                font-size: 1.3em;
+            }
+            
+            .contact-info {
+                display: block;
+                font-size: 0.8em;
+            }
+            
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .search-box-header {
+                flex-grow: 1;
+                margin-right: 10px;
+            }
+            
+            .btn-pengaduan {
+                display: none;
+            }
+            
+            /* Mobile menu toggle */
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .main-nav {
+                display: none;
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            .main-nav.active {
+                display: block;
+            }
+            
+            .main-nav ul {
+                flex-direction: column;
+            }
+            
+            .main-nav li {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .main-nav li:last-child {
+                border-bottom: none;
+            }
+            
+            .main-nav li a {
+                padding: 10px 0;
+            }
+            
+            /* Map adjustments */
+            .map-container {
+                height: 400px;
+            }
+            
+            .control-row {
+                flex-direction: column;
+            }
+            
+            .control-group {
+                min-width: 100%;
+            }
+            
+            .map-search {
+                min-width: 100%;
+            }
+            
+            /* Category tabs */
+            .category-tabs {
+                justify-content: center;
+            }
+            
+            .category-tab {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+            
+            /* Locations grid */
+            .locations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Modal adjustments */
+            .modal-content {
+                margin: 20px auto;
+                width: 95%;
+            }
+            
+            .modal-image {
+                height: 200px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .modal-title {
+                font-size: 1.5em;
+            }
+            
+            /* Footer adjustments */
+            .footer-container {
+                flex-direction: column;
+            }
+            
+            .brand-info, .menu-links, .contact-info {
+                flex-basis: 100%;
+                margin-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .map-container {
+                height: 300px;
+            }
+            
+            .category-tab {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+            
+            .location-card {
+                margin-bottom: 15px;
+            }
+            
+            .location-image {
+                height: 150px;
+            }
+            
+            .location-content {
+                padding: 12px;
+            }
+            
+            .location-title {
+                font-size: 1em;
+            }
+            
+            .location-description {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-top">
+            <div class="header-left">
+                <div class="header-logo">GEODES<span class="logo-dot">A</span>.ID</div>
+                <div class="contact-info">
+                    <span><i class="fas fa-phone"></i> GEODESA.id</span> |
+                    <span><i class="fab fa-whatsapp"></i> +62 82345xxxxx</span>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="search-box-header">
+                    <input type="text" placeholder="Cari lokasi...">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </div>
+                <a href="#" class="btn-pengaduan">Buat Pengaduan</a>
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html">🏠 Profile Desa</a></li>
+                <li><a href="h.html">📝 Informasi Desa</a></li>
+                <li><a href="data-statistik.html">📊 Data Statistik</a></li>
+                <li><a href="peta.html">🗺️ Peta Desa</a></li>
+                <li><a href="peta.html">📞 Kontak</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Peta Desa</h1>
+            <p>Jelaj lokasi penting dan fasilitas desa</p>
+        </div>
+        
+        <section class="map-section">
+            <div class="map-controls">
+                <div class="control-row">
+                    <div class="control-group">
+                        <label for="category">Kategori Lokasi</label>
+                        <select id="category">
+                            <option value="">Semua Kategori</option>
+                            <option value="fasilitas">Fasilitas Umum</option>
+                            <option value="pendidikan">Pendidikan</option>
+                            <option value="kesehatan">Kesehatan</option>
+                            <option value="pemerintahan">Pemerintahan</option>
+                            <option value="ekonomi">Ekonomi</option>
+                            <option value="wisata">Wisata</option>
+                            <option value="peribadaban">Peribadaban</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group map-search">
+                        <input type="text" id="locationSearch" placeholder="Cari lokasi...">
+                        <button type="button"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </section>
+        
+        <section class="categories-section">
+            <h2 class="section-title">Kategori Lokasi</h2>
+            
+            <div class="category-tabs">
+                <div class="category-tab active" data-category="all">
+                    <i class="fas fa-map-marked-alt category-icon"></i>
+                    <span>Semua</span>
+                </div>
+                <div class="category-tab" data-category="fasilitas">
+                    <i class="fas fa-hospital category-icon"></i>
+                    <span>Fasilitas Umum</span>
+                </div>
+                <div class="category-tab" data-category="pendidikan">
+                    <i class="fas fa-school category-icon"></i>
+                    <span>Pendidikan</span>
+                </div>
+                <div class="category-tab" data-category="kesehatan">
+                    <i class="fas fa-heartbeat category-icon"></i>
+                    <span>Kesehatan</span>
+                </div>
+                <div class="category-tab" data-category="pemerintahan">
+                    <i class="fas fa-landmark category-icon"></i>
+                    <span>Pemerintahan</span>
+                </div>
+                <div class="category-tab" data-category="ekonomi">
+                    <i class="fas fa-store category-icon"></i>
+                    <span>Ekonomi</span>
+                </div>
+                <div class="category-tab" data-category="wisata">
+                    <i class="fas fa-tree category-icon"></i>
+                    <span>Wisata</span>
+                </div>
+                <div class="category-tab" data-category="peribadaban">
+                    <i class="fas fa-home category-icon"></i>
+                    <span>Peribadaban</span>
+                </div>
+            </div>
+        </section>
+        
+        <section class="locations-section">
+            <h2 class="section-title">Lokasi Terdekat</h2>
+            
+            <div class="locations-grid">
+                <div class="location-card" onclick="openLocationModal(1)">
+                    <img src="https://via.placeholder.com/280x180?text=Kantor+Desa" alt="Kantor Desa" class="location-image">
+                    </div>
+                    <div class="location-content">
+                        <div class="location-category">
+                            <i class="fas fa-landmark"></i>
+                            <span>Fasilitas Umum</span>
+                        </div>
+                        <h3 class="location-title">Kantor Desa</h3>
+                        <p class="location-description">Kantor pemerintah desa yang menyediakan berbagai layanan administratif bagi warga.</p>
+                        <div class="location-footer">
+                            <div class="location-distance">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>0.5 km</span>
+                            </div>
+                            <div class="location-actions">
+                                <button class="btn-directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-detail">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="location-card" onclick="openLocationModal(2)">
+                    <img src="https://via.placeholder.com/280x180?text=SD+Negeri+1" alt="SD Negeri 1" class="location-image">
+                    </div>
+                    <div class="location-content">
+                        <div class="location-category">
+                            <i class="fas fa-school"></i>
+                            <span>Pendidikan</span>
+                        </div>
+                        <h3 class="location-title">SD Negeri 1</h3>
+                        <p class="location-description">Sekolah dasar negeri dengan fasilitas lengkap untuk mendukung proses belajar mengajar.</p>
+                        <div class="location-footer">
+                            <div class="location-distance">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>1.2 km</span>
+                            </div>
+                            <div class="location-actions">
+                                <button class="btn-directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-detail">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="location-card" onclick="openLocationModal(3)">
+                    <img src="https://via.placeholder.com/280x180?text=Puskesmas+Desa" alt="Puskesmas Desa" class="location-image">
+                    </div>
+                    <div class="location-content">
+                        <div class="location-category">
+                            <i class="fas fa-heartbeat"></i>
+                            <span>Kesehatan</span>
+                        </div>
+                        <h3 class="location-title">Puskesmas Desa</h3>
+                        <p class="location-description">Puskesmas desa yang menyediakan layanan kesehatan dasar bagi masyarakat.</p>
+                        <div class="location-footer">
+                            <div class="location-distance">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>0.8 km</span>
+                            </div>
+                            <div class="location-actions">
+                                <button class="btn-directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-detail">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="location-card" onclick="openLocationModal(4)">
+                    <img src="https://via.placeholder.com/280x180?text=Pasar+Tradisional" alt="Pasar Tradisional" class="location-image">
+                    </div>
+                    <div class="location-content">
+                        <div class="location-category">
+                            <i class="fas fa-store"></i>
+                            <span>Ekonomi</span>
+                        </div>
+                        <h3 class="location-title">Pasar Tradisional</h3>
+                        <p class="location-description">Pasar tradisional desa yang menjual berbagai produk lokal dan hasil pertanian warga.</p>
+                        <div class="location-footer">
+                            <div class="location-distance">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>1.5 km</span>
+                            </div>
+                            <div class="location-actions">
+                                <button class="btn-directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-detail">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="location-card" onclick="openLocationModal(5)">
+                    <img src="https://via.placeholder.com/280x180?text=Masjid+Jami" alt="Masjid Jami" class="location-image">
+                    </div>
+                    <div class="location-content">
+                        <div class="location-category">
+                            <i class="fas fa-mosque"></i>
+                            <span>Peribadaban</span>
+                        </div>
+                        <h3 class="location-title">Masjid Jami'</h3>
+                        <p class="location-description">Masjid Jami' yang menjadi pusat kegiatan keagamaan dan ibadah warga desa.</p>
+                        <div class="location-footer">
+                            <div class="location-distance">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>2.0 km</span>
+                            </div>
+                            <div class="location-actions">
+                                <button class="btn-directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-detail">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="location-card" onclick="openLocationModal(6)">
+                    <img src="https://via.placeholder.com/280x180?text=Air+Terjun" alt="Air Terjun" class="location-image">
+                    </div>
+                    <div class="location-content">
+                        <div class="location-category">
+                            <i class="fas fa-tree"></i>
+                            <span>Wisata</span>
+                        </div>
+                        <h3 class="location-title">Air Terjun</h3>
+                        <p class="location-description">Objek wisata air terjun yang menjadi daya tarik wisatawan lokal dan luar.</p>
+                        <div class="location-footer">
+                            <div class="location-distance">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>3.5 km</span>
+                            </div>
+                            <div class="location-actions">
+                                <button class="btn-directions">
+                                    <i class="fas fa-directions"></i>
+                                </button>
+                                <button class="btn-detail">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Location Modal -->
+    <div id="locationModal" class="location-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeLocationModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <img id="modalImage" src="" alt="Location Image" class="modal-image">
+            <div class="modal-body">
+                <h2 id="modalTitle" class="modal-title"></h2>
+                <div id="modalCategory" class="modal-category"></div>
+                <p id="modalDescription" class="modal-description"></p>
+                
+                <div class="modal-details">
+                    <h4>Informasi Lokasi</h4>
+                    <div class="detail-item">
+                        <span class="detail-label">Alamat:</span>
+                        <span id="modalAddress" class="detail-value"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Koordinat:</span>
+                        <span id="modalCoordinates" class="detail-value"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Jam Operasional:</span>
+                        <span id="modalHours" class="detail-value"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Kontak:</span>
+                        <span id="modalContact" class="detail-value"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Website:</span>
+                        <span id="modalWebsite" class="detail-value"></span>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="modal-btn modal-btn-primary" onclick="getDirections()">
+                        <i class="fas fa-directions"></i> Petunjuk Arah
+                    </button>
+                    <button class="modal-btn modal-btn-secondary" onclick="closeLocationModal()">
+                        <i class="fas fa-times"></i> Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-col brand-info">
+                <div class="footer-logo-text">GEODES<span class="dot-footer">A</span>.ID</div>
+                <p class="brand-text">RRDesa Template</p>
+                <a href="#">
+                    <img src="https://via.placeholder.com/150x50?text=Google+Play" alt="Tersedia di Google Play" class="playstore-badge">
+                </a>
+            </div>
+
+            <div class="footer-col menu-links">
+                <h3>Menu Lainnya</h3>
+                <ul>
+                    <li><a href="#"><span class="list-icon">•</span> Pengumuman</a></li>
+                    <li><a href="#"><span class="list-icon">•</span> Visi & Misi</a></li>
+                    <li><a href="#"><span class="list-icon">•</span> Sejarah Desa</a></li>
+                    <li><a href="#"><span class="list-icon">•</span> Aparatur Desa</a></li>
+                    <li><a href="#"><span class="list-icon">•</span> Produk Desa</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col contact-info">
+                <h3>Hubungi Kami</h3>
+                <div class="social-icons-footer">
+                    <a href="#" class="social-icon">▶️</a> 
+                    <a href="#" class="social-icon">📸</a> 
+                    <a href="#" class="social-icon">🐦</a>
+                </div>
+                <p class="contact-detail"><span class="detail-label">Email :</span> geodesa.id</p>
+                <p class="contact-detail"><span class="detail-label">WA :</span> +62 82345xxxxx</p>
+            </div>
+        </div>
+        <div class="copyright-info">
+            RRDesa Template © All rights reserved | Made with ❤️ by <span class="geodesa-link">GEODESA.ID</span>
+        </div>
+    </footer>
+
+    <script>
+        // Location data
+        const locations = {
+            1: {
+                title: "Kantor Desa",
+                category: "Fasilitas Umum",
+                coordinates: [-6.9175, 107.6191],
+                address: "Jl. Desa Utama No. 1, Desa Rajagaluh Kidul",
+                hours: "Senin - Jumat: 08:00 - 16:00",
+                contact: "021-1234567",
+                website: "www.desa-rajagaluh.id",
+                image: "https://via.placeholder.com/800x400?text=Kantor+Desa",
+                description: "Kantor pemerintah desa yang menyediakan berbagai layanan administratif bagi warga. Layanan yang tersedia meliputi pelayanan administratif, pelayanan publik, dan konsultasi perizinan."
+            },
+            2: {
+                title: "SD Negeri 1",
+                category: "Pendidikan",
+                coordinates: [-6.9175, 107.6191],
+                address: "Jl. Pendidikan No. 5, Desa Rajagaluh Kidul",
+                hours: "Senin - Jumat: 07:00 - 13:00",
+                contact: "021-1234568",
+                website: "www.sdnegeri1-desa.id",
+                image: "https://via.placeholder.com/800x400?text=SD+Negeri+1",
+                description: "Sekolah dasar negeri dengan fasilitas lengkap untuk mendukung proses belajar mengajar. Fasilitas meliputi ruang kelas, perpustakaan, laboratorium komputer, perpustakaan olahraga, dan lapangan olahraga."
+            },
+            3: {
+                title: "Puskesmas Desa",
+                category: "Kesehatan",
+                coordinates: [-6.9175, 107.6191],
+                address: "Jl. Kesehatan No. 3, Desa Rajagaluh Kidul",
+                hours: "Senin - Sabtu: 08:00 - 20:00",
+                contact: "021-1234569",
+                website: "www.puskesmas-desa.id",
+                image: "https://via.placeholder.com/800x400?text=Puskesmas+Desa",
+                description: "Puskesmas desa yang menyediakan layanan kesehatan dasar bagi masyarakat. Layanan yang tersedia meliputi pemeriksaan kesehatan, imunisasi, konsultasi dokter, dan pengobatan dasar."
+            },
+            4: {
+                title: "Pasar Tradisional",
+                category: "Ekonomi",
+                coordinates: [-6.9175, 107.6191],
+                address: "Jl. Pasar Tradisional, Desa Rajagaluh Kidul",
+                hours: "Senin - Sabtu: 06:00 - 18:00",
+                contact: "021-1234570",
+                website: "www.pasar-desa.id",
+                image: "https://via.placeholder.com/800x400?text=Pasar+Tradisional",
+                description: "Pasar tradisional desa yang beroperasi setiap hari dan menjual berbagai produk lokal dan hasil pertanian warga. Tempat yang ideal untuk mencari produk segar dengan harga terjangkau."
+            },
+            5: {
+                title: "Masjid Jami'",
+                category: "Peribadaban",
+                coordinates: [-6.9175, 107.6191],
+                address: "Jl. Masjid Jami', Desa Rajagaluh Kidul",
+                hours: "5 kali sehari (Subuh, Dzuhur, Ashar, Maghrib, Isya)",
+                contact: "021-1234571",
+                website: "www.masjid-jami.id",
+                image: "https://via.placeholder.com/800x400?text=Masjid+Jami",
+                description: "Masjid Jami' yang menjadi pusat kegiatan keagamaan dan ibadah warga desa. Dilengkapi dengan fasilitas yang memadai nyaman dan nyaman untuk jamaah."
+            },
+            6: {
+                title: "Air Terjun",
+                category: "Wisata",
+                coordinates: [-6.9175, 107.6191],
+                address: "Desa Rajagaluh Kidul, dekat sungai",
+                hours: "24/7",
+                contact: "021-1234572",
+                website: "www.air-terjun.id",
+                air_terjun: "https://via.placeholder.com/800x400?text=Air+Terjun",
+                description: "Objek wisata air terjun yang menjadi daya tarik wisatawan lokal dan luar. Terletak di aliran sungai desa dengan pemandangan yang indah dan udara segar."
+            }
+        };
+        
+        // Initialize map
+        let map;
+        let markers = [];
+        let currentCategory = 'all';
+        
+        function initMap() {
+            // Initialize the map centered on the village
+            map = L.map('map').setView([-6.9175, 107.6191], 13);
+            
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addToMap(map);
+            
+            // Add all markers
+            updateMarkers();
+        }
+        
+        // Update markers based on selected category
+        function updateMarkers() {
+            // Clear existing markers
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+            
+            // Add markers for locations in the selected category
+            locations.forEach((location, index) => {
+                if (currentCategory === 'all' || location.category === currentCategory) {
+                    const marker = L.marker([location.coordinates[0], location.coordinates[1]], {
+                        title: location.title,
+                        icon: getCategoryIcon(location.category)
+                    }).addTo(map);
+                    
+                    marker.bind('click', function() {
+                        openLocationModal(index + 1);
+                    });
+                    
+                    markers.push(marker);
+                }
+            });
+        }
+        
+        // Get icon based on category
+        function getCategoryIcon(category) {
+            const icons = {
+                'fasilitas': '🏢️',
+                'pendidikan': '🏫️',
+                'kesehatan': '🏥️',
+                'pemerintahan': '🏛️',
+                'ekonomi': '🏪️',
+                'wisata': '🌳',
+                'peribadaban': '🏛️'
+            };
+            
+            return icons[category] || '📍';
+        }
+        
+        // Mobile menu toggle
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const mainNav = document.querySelector('.main-nav');
+        
+        mobileMenuToggle.addEventListener('click', function() {
+            mainNav.classList.toggle('active');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideNav = mainNav.contains(event.target);
+            const isClickOnToggle = mobileMenuToggle.contains(event.target);
+            
+            if (!isClickInsideNav && !isClickOnToggle && mainNav.classList.contains('active')) {
+                mainNav.classList.remove('active');
+            }
+        });
+        
+        // Category tabs functionality
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        categoryTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                categoryTabs.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Update current category
+                currentCategory = this.dataset.category;
+                
+                // Update markers on map
+                updateMarkers();
+                
+                // Update location cards
+                updateLocationCards();
+            });
+        });
+        
+        // Update location cards based on selected category
+        function updateLocationCards() {
+            const grid = document.querySelector('.locations-grid');
+            grid.innerHTML = '';
+            
+            locations.forEach((location, index) => {
+                if (currentCategory === 'all' || location.category === currentCategory) {
+                    const card = document.createElement('div');
+                    card.className = 'location-card';
+                    card.onclick = () => openLocationModal(index + 1);
+                    
+                    card.innerHTML = `
+                        <img src="${location.image}" alt="${location.title}" class="location-image">
+                        </div>
+                        <div class="location-content">
+                            <div class="location-category">
+                                <i class="fas ${getCategoryIcon(location.category)}"></i>
+                                <span>${getCategoryName(location.category)}</span>
+                            </div>
+                            <h3 class="location-title">${location.title}</h3>
+                            <p class="location-description">${location.description.substring(0, 100)}...</p>
+                            <div class="location-footer">
+                                <div class="location-distance">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${calculateDistance(location.coordinates, [-6.9175, 107.6191])}</span>
+                                </div>
+                                <div class="location-actions">
+                                    <button class="btn-directions">
+                                        <i class="fas fa-directions"></i>
+                                    </button>
+                                    <button class="btn-detail">Detail</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    grid.appendChild(card);
+                }
+            });
+        }
+        
+        // Get category name
+        function getCategoryName(category) {
+            const names = {
+                'fasilitas': 'Fasilitas Umum',
+                'pendidikan': 'Pendidikan',
+                'kesehatan': 'Kesehatan',
+                'pemerintahan': 'Pemerintahan',
+                'location-search': 'Pencarian Lokasi',
+                'ekonomi': 'Ekonomi',
+                'wisata': 'Wisata',
+                'peribadaban': 'Peribadaban'
+            };
+            
+            return names[category] || 'Lokasi';
+        }
+        
+        // Calculate distance between two coordinates
+        function calculateDistance(coord1, coord2) {
+            const R = 6371; // Earth's radius in km
+            const dLat = (coord2[0] - coord1[0]) * Math.PI / 180;
+            const dLon = (coord2[1] - coord1[1]) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.cos(dLat/2);
+            const c = Math.cos(dLat/2) * Math.cos(dLat/2);
+            const d = Math.sqrt(2 * R * R * (1 - c));
+            
+            return (2 * R * Math.asin(d / (2 * R))) * 1000; // Distance in meters
+        }
+        
+        // Location modal functions
+        function openLocationModal(id) {
+            const modal = document.getElementById('locationModal');
+            const location = locations[id - 1];
+            
+            if (location) {
+                document.getElementById('modalImage').src = location.image;
+                document.getElementById('modalTitle').textContent = location.title;
+                document.getElementById('modalCategory').textContent = getCategoryName(location.category);
+                document.getElementById('modalDescription').textContent = location.description;
+                document.getElementById('modalAddress').textContent = location.address;
+                document.getElementById('modalCoordinates').textContent = `${location.coordinates[0]}, ${location.coordinates[1]}`;
+                document.getElementById('modalHours').textContent = location.hours;
+                document.getElementById('modalContact').textContent = location.contact;
+                document.getElementById('modalWebsite').textContent = location.website;
+                
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        function closeLocationModal() {
+            const modal = document('locationModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        function getDirections() {
+            const location = locations.find(loc => loc.title === document.getElementById('modalTitle').textContent);
+            
+            if (location) {
+                const url = `https://www.google.com/maps/dir/?api=1&destination=${location.coordinates[0]},${location.coordinates[1]}`;
+                window.open(url, '_blank');
+            }
+        }
+        
+        // Search functionality
+        document.getElementById('locationSearch').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (searchTerm.length > 2) {
+                const searchResults = locations.filter(location => 
+                    location.title.toLowerCase().includes(searchTerm) || 
+                    location.description.toLowerCase().includes(searchTerm)
+                );
+                
+                // Update map with search results
+                updateSearchResults(searchResults);
+            } else {
+                // Reset to all locations
+                updateMarkers();
+                updateLocationCards();
+            }
+        });
+        
+        function updateSearchResults(searchResults) {
+            // Clear existing markers
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+            
+            // Add search result markers
+            searchResults.forEach((location, index) => {
+                const marker = L.marker([location.coordinates[0], location.coordinates[1]], {
+                    title: location.title,
+                    icon: '🔍'
+                }).addTo(map);
+                
+                marker.bind('click', () => {
+                    openLocationModal(locations.indexOf(location) + 1);
+                });
+                
+                markers.push(marker);
+            });
+            
+            // Fit map to search results
+            if (searchResults.length > 0) {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        }
+        
+        // Initialize map when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+        });
+    </script>
+
+</body>
+</html>

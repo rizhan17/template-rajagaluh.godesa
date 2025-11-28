@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GEODESA.ID - Data Statistik</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Reset dan Font Global */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0; padding: 0;
+            background: #f8fafd;
+            color: #222;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Header Top Bar */
+        .top-bar {
+            background: #fff;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+            gap: 10px;
+        }
+        .top-bar img {
+            width: 23px;
+            height: 23px;
+        }
+        .top-bar a {
+            color: #222;
+            font-weight: 600;
+        }
+
+        /* Navbar */
+        nav {
+            background: linear-gradient(90deg, #009245, #8cc631);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.7rem 2rem;
+            color: white;
+            position: relative;
+        }
+        nav .logo {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+        }
+        nav .logo .blue {
+            color: #1b6bc7;
+        }
+        nav .logo .red {
+            color: #f24522;
+        }
+        nav ul {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+            gap: 2rem;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        nav ul li {
+            cursor: pointer;
+            color: white;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        nav ul li:hover,
+        nav ul li.active {
+            opacity: 1;
+            color: #d4db5e; /* warna #d4db5e untuk 'Data Statistik' */
+        }
+        nav .btn-aduan {
+            background: #f58247;
+            color: white;
+            border-radius: 18px;
+            padding: 8px 18px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            box-shadow: 0 3px 6px rgb(240 132 70 / 0.5);
+            transition: background 0.3s ease;
+        }
+        nav .btn-aduan:hover {
+            background: #e56e25;
+        }
+
+        /* Hamburger Menu Styling */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 25px;
+            height: 20px;
+        }
+        .hamburger .bar {
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            transition: all 0.3s linear;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1140px;
+            margin: 2rem auto 4rem;
+            padding: 0 1rem;
+        }
+        /* Cards container for pie charts */
+        .cards-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem 1.2rem 1.5rem;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+            flex: 1 1 calc(33.333% - 1rem);
+            min-width: 280px;
+            margin-bottom: 2rem;
+        }
+        .card h3 {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #222;
+        }
+        .legend {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 12px;
+            justify-content: center;
+            gap: 12px;
+            user-select:none;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+        /* Penyesuaian font-size legend pekerjaan */
+        .pekerjaan-legend .legend-item {
+            font-size: 11px;
+        }
+
+        /* Pengaduan Banner */
+        .aduan-banner {
+            background: linear-gradient(135deg, #0f7d9b, #2abd8f);
+            border-radius: 12px;
+            padding: 25px 30px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .aduan-text {
+            max-width: 66%;
+        }
+        .aduan-text h3 {
+            margin: 0 0 8px;
+            font-weight: 700;
+            font-size: 22px;
+            line-height: 1.1;
+            border-bottom: 3px solid #f58247;
+            display: inline-block;
+            padding-bottom: 3px;
+        }
+        .aduan-text p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.4;
+            user-select:none;
+        }
+        .aduan-btn {
+            background-color: #f58247;
+            border-radius: 18px;
+            color: white;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 11px 22px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgb(240 132 70 / 0.5);
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+            user-select:none;
+            margin-top: 15px; /* Tambahkan sedikit margin atas */
+        }
+        .aduan-btn:hover {
+            background-color: #e56e25;
+        }
+        .aduan-btn svg {
+            fill: white;
+            width: 16px;
+            height: 16px;
+        }
+        /* Illustration placeholder circle on right side */
+        .aduan-illustration {
+            flex: 1 1 280px;
+            max-width: 280px;
+            aspect-ratio: 1 / 1;
+            background: url('https://assets.codepen.io/3741781/chat-illustration.svg') no-repeat center/contain;
+            pointer-events:none;
+            user-select:none;
+        }
+
+        /* Footer */
+        footer {
+            background: #444;
+            color: white;
+            padding: 30px 2rem;
+        }
+        footer .footer-container {
+            max-width: 1140px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .footer-logo {
+            font-weight: 900;
+            font-size: 28px;
+            user-select:none;
+        }
+        .footer-logo .blue {
+            color: #1b6bc7;
+        }
+        .footer-logo .red {
+            color: #f24522;
+        }
+        .footer-section {
+            flex: 1 1 220px;
+            min-width: 220px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .footer-section h4 {
+            margin-bottom: 12px;
+            border-bottom: 2px solid #f58247;
+            display: inline-block;
+        }
+        .footer-section a {
+            color: #a3d6ff;
+            display: block;
+            margin-bottom: 8px;
+            user-select:none;
+        }
+        .footer-section a span {
+            margin-right: 6px; /* Ganti margin-left ke margin-right */
+        }
+        .footer-icons {
+            display: flex;
+            gap: 10px;
+            margin-top: 6px;
+        }
+        .footer-icons a svg {
+            fill: white;
+            width: 20px;
+            height: 20px;
+            transition: fill 0.3s;
+        }
+        .footer-icons a:hover svg {
+            fill: #f58247;
+        }
+        .footer-bottom {
+            text-align: center;
+            margin-top: 24px;
+            border-top: 1px solid #666;
+            padding-top: 14px;
+            font-size: 12px;
+            color: #d3d3d3;
+            user-select:none;
+        }
+
+        /* Styling Baru/Modifikasi untuk Transparansi Anggaran */
+        .cards-donut {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 3rem; /* Mempertahankan margin bawah */
+        }
+        .card-donut {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+            flex: 1 1 calc(33.333% - 1rem);
+            min-width: 280px;
+            padding: 1rem 1rem 1.5rem;
+            text-align: center; /* Tambahkan ini untuk teks di dalam card */
+        }
+        .card-donut h3 {
+            margin-bottom: 0.8rem;
+            font-weight: 700; /* Dibuat lebih tebal */
+            font-size: 16px;
+            border-bottom: 2px solid #eca15e; /* Dibuat lebih tebal */
+            padding-bottom: 0.4rem;
+            color: #9b6844;
+        }
+        .donut-text {
+            /* Perubahan untuk positioning di tengah canvas */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%; /* Batasi lebar */
+            
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            line-height: 1.3;
+            font-family: 'Inter', sans-serif;
+            color: #444;
+            pointer-events: none; /* Agar tidak menghalangi interaksi chart */
+        }
+        .donut-text .rp-bold {
+            font-weight: 900; /* Dibuat lebih tebal */
+            font-size: 20px;
+            display: block; /* Pastikan di baris sendiri */
+            color: #117f17; /* Memberikan warna pada nilai utama */
+        }
+        .donut-text small {
+            display: block;
+            margin-top: 5px;
+            font-size: 13px;
+            color: #777;
+            font-weight: 400; /* Total tidak perlu terlalu tebal */
+        }
+        
+        /* --- MEDIA QUERIES UNTUK RESPONSIVITAS --- */
+        @media (max-width: 992px) {
+            nav ul {
+                gap: 1.5rem;
+            }
+            nav {
+                padding: 0.7rem 1.5rem;
+            }
+            
+            .cards-row, .cards-donut {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Navbar */
+            .hamburger {
+                display: flex;
+                z-index: 1001; /* Pastikan di atas menu */
+            }
+            nav {
+                padding: 0.7rem 1rem;
+            }
+            nav .menu-list {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(90deg, #009245, #8cc631);
+                flex-direction: column;
+                padding: 1rem 0;
+                display: none;
+                transition: all 0.3s ease-out;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+            nav .menu-list.open {
+                display: flex;
+            }
+            nav .menu-list li {
+                padding: 0.5rem 1rem;
+                width: 100%;
+                text-align: center;
+            }
+            nav .btn-aduan {
+                display: none; /* Sembunyikan tombol aduan di navbar untuk mobile */
+            }
+
+            /* Hamburger Menu Animation */
+            .hamburger.active .bar:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+            .hamburger.active .bar:nth-child(2) { opacity: 0; }
+            .hamburger.active .bar:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+            /* Cards */
+            .cards-row, .cards-donut {
+                justify-content: center;
+            }
+            .card, .card-donut {
+                flex: 1 1 100%; /* Ambil lebar penuh */
+                max-width: 400px;
+            }
+            
+            /* Adjust chart containers for mobile */
+            .card canvas, .card-donut canvas {
+                max-height: 200px;
+            }
+            
+            /* Adjust donut text for mobile */
+            .donut-text {
+                font-size: 14px;
+            }
+            .donut-text .rp-bold {
+                font-size: 18px;
+            }
+
+            /* Aduan Banner */
+            .aduan-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+            .aduan-text {
+                max-width: 100%;
+            }
+            .aduan-illustration {
+                order: -1; /* Pindahkan ilustrasi ke atas */
+                margin-bottom: 20px;
+                max-width: 200px;
+                flex-basis: 200px;
+            }
+            .aduan-btn {
+                margin: 15px auto 0;
+            }
+
+            /* Footer */
+            footer .footer-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .footer-section {
+                min-width: auto;
+                flex-basis: 100%;
+            }
+            .footer-section h4 {
+                text-align: center;
+                margin-top: 1rem;
+            }
+            .footer-section a {
+                text-align: center;
+            }
+            .footer-icons {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* Adjustments for very small screens */
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .card, .card-donut {
+                padding: 0.8rem 1rem;
+            }
+            
+            .card h3, .card-donut h3 {
+                font-size: 14px;
+            }
+            
+            .legend {
+                font-size: 11px;
+                gap: 8px;
+            }
+            
+            .pekerjaan-legend .legend-item {
+                font-size: 10px;
+            }
+            
+            .aduan-text h3 {
+                font-size: 18px;
+            }
+            
+            .aduan-text p {
+                font-size: 13px;
+            }
+            
+            .donut-text {
+                font-size: 12px;
+            }
+            .donut-text .rp-bold {
+                font-size: 16px;
+            }
+            .donut-text small {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="Ikon WhatsApp" />
+        <a href="https://wa.me/6282345xxxxx" target="_blank">+62 82345xxxxx</a>
+    </div>
+ 
+    <nav>
+        <div class="logo"><span class="blue">GEODESA.</span><span class="red">ID</span></div>
+
+        <div class="hamburger" id="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <ul class="menu-list" id="menu-list">
+            <li><a href="index.html">🏠 Profile Desa</a></li>
+            <li><a href="h.html">📝 Informasi Desa</a></li>
+            <li><a href="data-statistik.html">📊 Data Statistik</a></li>
+            <li><a href="peta.html">📞 Kontak</a></li>
+        </ul>
+        <button class="btn-aduan" aria-label="Buat Pengaduan">
+            Buat Pengaduan
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:14px; width:14px;">
+                <path d="M15 15v-3l-7-7-4 4-4-1 1 4 7 7h3z" stroke="white" stroke-width="2"/>
+            </svg>
+        </button>
+    </nav>
+
+    <div class="container">
+
+        <div class="cards-row" style="margin-bottom: 3rem;">
+            <div class="card">
+                <h3>Data Penduduk Berdasarkan Jenis Kelamin</h3>
+                <div style="height:200px; margin-bottom: 10px;">
+                    <canvas id="genderChart"></canvas>
+                </div>
+                <div class="legend" id="genderLegend">
+                    <div class="legend-item"><div class="legend-color" style="background:#3774e2;"></div>Laki - Laki</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#d62698;"></div>Perempuan</div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Data Penduduk Berdasarkan Agama</h3>
+                <div style="height:200px; margin-bottom: 10px;">
+                    <canvas id="agamaChart"></canvas>
+                </div>
+                <div class="legend" id="agamaLegend">
+                    <div class="legend-item"><div class="legend-color" style="background:#28621a;"></div>Agama Islam</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#f58247;"></div>Agama Katolik</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#6b4b26;"></div>Agama Kristen</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#58b2d2;"></div>Agama Hindu</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#ff3f82;"></div>Agama Buddha</div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Data Penduduk Berdasarkan Pekerjaan</h3>
+                <div style="height:200px; margin-bottom: 10px;">
+                    <canvas id="pekerjaanChart"></canvas>
+                </div>
+                <div class="legend pekerjaan-legend" id="pekerjaanLegend">
+                    <div class="legend-item"><div class="legend-color" style="background:#f6b513;"></div>PNS</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#6105ed;"></div>Pegawai Swasta</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#9161c8;"></div>Guru</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#1f41db;"></div>Pedagang/Wirasawasta</div>
+                    <div class="legend-item"><div class="legend-color" style="background:#c21f20;"></div>Tidak Bekerja</div>
+                </div>
+            </div>
+        </div>
+
+     <div class="transparency-section">
+    <h2 style="color: #222; font-weight: 700; margin-bottom: 25px; border-bottom: 3px solid #8cc631; display: inline-block; padding-bottom: 5px;">Transparansi Anggaran 💰</h2>
+    
+    <div class="cards-donut">
+        
+        <div class="card-donut">
+            <h3>APBDES 2023 Pendapatan</h3>
+            <div style="position: relative; height:180px; width:100%;">
+                <canvas id="pendapatanChart"></canvas>
+                <div class="donut-text">
+                    <span class="rp-bold" id="pendapatanValue">Rp0</span>
+                    <small>Total: <span id="pendapatanTotal">Rp. 827.186.422</span></small>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-donut">
+            <h3>APBDES 2023 Pelaksanaan</h3>
+            <div style="position: relative; height:180px; width:100%;">
+                <canvas id="pelaksanaanChart"></canvas>
+                <div class="donut-text">
+                    <span class="rp-bold" id="pelaksanaanValue">Rp0</span>
+                    <small>Total: <span id="pelaksanaanTotal">Rp. 182.425.563</span></small>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-donut">
+            <h3>APBDES 2023 Pembelanjaan</h3>
+            <div style="position: relative; height:180px; width:100%;">
+                <canvas id="pembelanjaanChart"></canvas>
+                <div class="donut-text">
+                    <span class="rp-bold" id="pembelanjaanValue">Rp0</span>
+                    <small>Total: <span id="pembelanjaanTotal">Rp. 949.212.000</span></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <section class="aduan-banner">
+            <div class="aduan-text">
+                <h3>Pengaduan Desa</h3>
+                <p>Apabila Anda Memiliki Keluhan dan Dan Permasalahan bisa klik button di bawah ini !</p>
+                <button class="aduan-btn" aria-label="Buat Pengaduan Sekarang">
+                    Buat Pengaduan
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 14" fill="none" aria-hidden="true" role="img"><path d="M11.43 0.603c0.814 0.84 0.808 2.197 0.034 3.46l-6.822 8.618a0.7 0.7 0 01-0.592 0.305l-3.493-0.048a0.693 0.693 0 01-0.689-0.688l0.048-3.48a0.7 0.7 0 010.305-0.592L8.07 0.57c1.254-0.777 2.658-0.78 3.467 0.034z" fill="#fff"/></svg>
+                </button>
+            </div>
+            <div class="aduan-illustration" role="img" aria-label="Ilustrasi Chat"></div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section" style="flex: 1 1 280px; min-width: 280px;">
+                <div class="footer-logo"><span class="blue">GEODESA.</span><span class="red">ID</span></div>
+                <p style="margin-top: 8px;">GEODESA.ID</p>
+                <a href="#" style="display: inline-block; margin-top: 10px;" aria-label="Download di Google Play">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" style="width: 130px;" />
+                </a>
+            </div>
+            <div class="footer-section">
+                <h4>Menu Lainnya</h4>
+                <a href="#"><span>🟢</span> Pengumuman</a>
+                <a href="#"><span>🟢</span> Visi & Misi</a>
+                <a href="#"><span>🟢</span> Sejarah Desa</a>
+                <a href="#"><span>🟢</span> Aparatur Desa</a>
+                <a href="#"><span>🟢</span> Produk Desa</a>
+            </div>
+            <div class="footer-section">
+                <h4>Hubungi Kami</h4>
+                <div class="footer-icons" style="margin-bottom: 10px;">
+                    <a href="#" aria-label="Youtube">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M10 15l5.19-3L10 9v6z"/><path fill="currentColor" d="M21.8 7.22a2.68 2.68 0 00-1.88-1.89C18.68 5 12 5 12 5s-6.67 0-7.88.33a2.67 2.67 0 00-1.88 1.89A28.69 28.69 0 002 12a28.69 28.69 0 00.24 4.78 2.68 2.68 0 001.88 1.89C5.33 19 12 19 12 19s6.68 0 7.88-.33a2.68 2.68 0 001.88-1.89A28.69 28.69 0 0022 12a28.69 28.69 0 00-.2-4.78z"/></svg>
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M7 2C4.239 2 2 4.238 2 7v10c0 2.762 2.239 5 5 5h10c2.762 0 5-2.238 5-5V7c0-2.762-2.238-5-5-5H7zm7 3a1 1 0 110 2 1 1 0 010-2zm0 12a5 5 0 11-10 0 5 5 0 0110 0zm-5-9a4 4 0 100 8 4 4 0 000-8z"/></svg>
+                    </a>
+                    <a href="#" aria-label="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M9 8V6a3 3 0 013-3h3v4h-3v2h3v4h-3v6h-4v-6H6v-4h3z"/></svg>
+                    </a>
+                    <a href="#" aria-label="Twitter">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M22 7.25a6.8 6.8 0 01-1.89.52 3.3 3.3 0 001.45-1.81 6.71 6.71 0 01-2.1.8 3.32 3.32 0 00-2.46-1.06 3.3 3.3 0 00-3.31 3.33c0 .26.03.52.09.77A9.41 9.41 0 012 6.17a3.31 3.31 0 001.02 4.43 3.25 3.25 0 01-1.5-.42v.05a3.31 3.31 0 002.65 3.24 3.33 3.33 0 01-1.48.06 3.31 3.31 0 003.1 2.29 6.66 6.66 0 01-4.12 1.42c-.27 0-.53-.02-.79-.05a9.37 9.37 0 005.08 1.48c6.06 0 9.37-5.03 9.37-9.38 0-.14 0-.27-.01-.41A6.75 6.75 0 0022 7.24z"/></svg>
+                    </a>
+                </div>
+                <p>Email : geodesa.id</p>
+                <p>WA : +62 82345xxxxx</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            RRDesa Template © All rights reserved. | Made with ❤️ by <em>GEODESA.ID</em>
+        </div>
+    </footer>
+
+    <script>
+    // Data untuk pie charts (pastikan totalnya 100 untuk persentase)
+    const genderData = [60, 40]; // Laki-laki, Perempuan
+    const agamaData = [80, 6, 6, 5, 3]; // Islam, Katolik, Kristen, Hindu, Buddha
+    const pekerjaanData = [23, 26, 10, 24, 17]; // PNS, Swasta, Guru, Pedagang, Tidak Bekerja
+
+    // Data untuk donut charts APBDes
+    const apbDesData = [
+        { id: 'pendapatan', value: 760664335, total: 827186422 },
+        { id: 'pelaksanaan', value: 54150000, total: 182425563 },
+        { id: 'pembelanjaan', value: 759212000, total: 949212000 },
+    ];
+
+    /* Fungsi Pembantu: Format Rupiah */
+    function formatRupiah(angka) {
+        let reverse = angka.toString().split('').reverse().join('');
+        let ribuan = reverse.match(/\d{1,3}/g);
+        let rupiah = ribuan.join('.').split('').reverse().join('');
+        return `Rp${rupiah}`;
+    }
+
+    /* Fungsi Pembuatan Pie/Doughnut Chart (untuk data demografi) */
+    function createPieChart(ctx, data, labels, colors) {
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors,
+                    cutout: '40%',
+                    borderWidth: 1,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.parsed / total) * 100).toFixed(1) + '%';
+                                    label += percentage;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                maintainAspectRatio: false,
+            }
+        });
+    }
+
+    /* Fungsi Pembuatan Donut APBDes */
+    function createApbDesDonut(id, value, max) {
+        const ctx = document.getElementById(`${id}Chart`).getContext('2d');
+        const percentage = ((value / max) * 100).toFixed(1);
+        
+        // Update teks di tengah chart
+        document.getElementById(`${id}Value`).textContent = `${percentage}%`;
+        document.getElementById(`${id}Total`).textContent = `Total: ${formatRupiah(max)}`;
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Realisasi', 'Sisa Anggaran'],
+                datasets: [{
+                    data: [value, max - value],
+                    backgroundColor: ['#117f17', '#d6d8d8'], // Hijau untuk realisasi, abu-abu untuk sisa
+                    cutout: '85%', // Lingkaran yang sangat tipis (donut)
+                    borderWidth: 0,
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += formatRupiah(context.parsed);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                rotation: -90, // Sudut awal di atas
+                circumference: 360, // Lingkaran penuh
+                maintainAspectRatio: false,
+            }
+        });
+    }
+
+    /* Inisialisasi Chart Demografi */
+    const genderCtx = document.getElementById('genderChart').getContext('2d');
+    createPieChart(genderCtx, genderData, ['Laki - Laki', 'Perempuan'], ['#3774e2', '#d62698']);
+
+    const agamaCtx = document.getElementById('agamaChart').getContext('2d');
+    createPieChart(agamaCtx, agamaData, ['Agama Islam', 'Agama Katolik', 'Agama Kristen', 'Agama Hindu', 'Agama Buddha'], ['#28621a', '#f58247', '#6b4b26', '#58b2d2', '#ff3f82']);
+
+    const pekerjaanCtx = document.getElementById('pekerjaanChart').getContext('2d');
+    createPieChart(pekerjaanCtx, pekerjaanData, ['PNS', 'Pegawai Swasta', 'Guru', 'Pedagang/Wirasawasta', 'Tidak Bekerja'], ['#f6b513', '#6105ed', '#9161c8', '#1f41db', '#c21f20']);
+
+    /* Inisialisasi Donut Charts APBDes */
+    apbDesData.forEach(item => {
+        createApbDesDonut(item.id, item.value, item.total);
+    });
+    
+    /* Logika Hamburger Menu */
+    const hamburger = document.getElementById('hamburger');
+    const menuList = document.getElementById('menu-list');
+
+    hamburger.addEventListener('click', () => {
+        menuList.classList.toggle('open');
+        hamburger.classList.toggle('active');
+    });
+
+    // Tutup menu saat klik di luar
+    document.addEventListener('click', (event) => {
+        const isClickInsideNav = document.querySelector('nav').contains(event.target);
+        
+        if (!isClickInsideNav && menuList.classList.contains('open')) {
+            menuList.classList.remove('open');
+            hamburger.classList.remove('active');
+        }
+    });
+</script>
+
+</body>
+</html>

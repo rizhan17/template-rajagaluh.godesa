@@ -1,0 +1,2985 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Desa GEODESA.ID - Clone Lengkap</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* --- GLOBAL STYLING --- */
+        :root {
+            --color-primary: #1e8749; /* Hijau Utama */
+            --color-secondary: #ff8c00; /* Oranye/Tombol */
+            --color-light: #ffffff;
+            --color-dark: #333;
+            --font-main: 'Arial', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #f0f0f0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- 1. TOP BAR --- */
+        .top-header {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .top-bar {
+            background-color: #008722; /* Hijau lebih gelap untuk baris kontak */
+            color: var(--color-light);
+            padding: 5px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .top-bar-left span {
+            margin-right: 15px;
+        }
+
+        .social-icons i {
+            margin-left: 10px;
+            cursor: pointer;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            transition: background-color 0.2s;
+        }
+        
+        /* --- 2. MAIN NAVIGATION --- */
+        .main-nav {
+            background-color: var(--color-primary); /* Baris Menu Utama Hijau */
+            color: var(--color-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 60px;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .logo-main {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .logo-sub {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+
+        .menu-list li a {
+            color: var(--color-light);
+            text-decoration: none;
+            padding: 20px 18px; /* Padding vertikal besar agar menu pas dengan tinggi nav */
+            display: block;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            height: 20px;
+        }
+
+        .menu-list li a:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-pengaduan {
+            background-color: var(--color-secondary); /* Oranye */
+            color: var(--color-light);
+            text-decoration: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-pengaduan:hover {
+            background-color: #e67e22;
+            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        /* --- 3. HERO SECTION --- */
+        .hero-section {
+            /* Ganti dengan URL gambar Anda, ini hanya placeholder */
+            background: url('download (3).jpeg') no-repeat center center/cover;
+            height: 70vh; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            color: var(--color-dark);
+        }
+
+        /* Overlay putih transparan untuk efek kabut/filter gambar */
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                to bottom, 
+                rgba(255, 255, 255, 0.2) 0%, /* Lebih transparan di atas */
+                rgba(255, 255, 255, 0.6) 50%, /* Lebih pekat di tengah */
+                rgba(255, 255, 255, 0.8) 100% /* Sangat pekat di bawah */
+            );
+            z-index: 1;
+        }
+
+        .hero-content {
+            z-index: 2; /* Agar konten di atas overlay */
+        }
+
+        .google-icon {
+            font-family: 'Product Sans', sans-serif; /* Font Google */
+            font-size: 5em;
+            font-weight: bold;
+            /* Warna G Google */
+            background: linear-gradient(to right, #4285F4, #34A853, #FBBC05, #EA4335);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5em;
+            margin: 0;
+            color: #444;
+        }
+
+        .hero-content p {
+            font-size: 1.1em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .search-box {
+            background-color: var(--color-light);
+            border-radius: 30px;
+            padding: 10px 20px;
+            margin-top: 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            width: 90%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-box i {
+            color: var(--color-primary);
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            flex-grow: 1;
+            font-size: 1.1em;
+            color: var(--color-dark);
+        }
+
+        /* --- 4. MODULES SECTION (SHORTCUTS) --- */
+        .modules-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            /* Memindahkan kartu ke atas agar menimpa bagian bawah hero */
+            transform: translateY(-50px); 
+            z-index: 3;
+            position: relative;
+        }
+        
+        .modules-section {
+            background-color: var(--color-light);
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+            border-radius: 15px;
+            max-width: 1100px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .module-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            width: 120px;
+            padding: 5px 0;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            color: var(--color-primary);
+        }
+
+        .icon-wrapper {
+            background-color: #f8f8f8; /* Background lebih terang dari modul */
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 8px;
+            font-size: 2.2em;
+            color: var(--color-primary);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .module-card span {
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        
+        /* Modifikasi Ikon agar lebih mirip (contoh) */
+        .module-card:nth-child(3) .icon-wrapper { color: #f26522; } /* Pengaduan: Oranye */
+        .module-card:nth-child(4) .icon-wrapper { color: #e91e63; } /* Prodik: Merah Muda */
+        .module-card:nth-child(6) .icon-wrapper { color: #00bcd4; } /* Bantuan: Cyan */
+
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Background Halaman (Abu-abu sangat muda: #F3F4F6) */
+            background-color: #F3F4F6; 
+            /* Teks gelap: #1F2937 */
+            color: #1F2937; 
+        }
+
+        /* --- 1. LAYOUT KONTEN UTAMA --- */
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem; 
+        }
+
+        .main-content-section {
+            padding-top: 2rem;
+        }
+
+        /* Container utama yang memisahkan Banner dan Data Penduduk (menggunakan Grid) */
+        .main-banner-content {
+            display: grid;
+            grid-template-columns: 1fr; /* Mobile default */
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .main-banner-content {
+                /* Membagi ruang: Banner (70%), Data (30%) */
+                grid-template-columns: 3fr 1.5fr; 
+            }
+        }
+
+        /* --- 2. DIRGAHAYU & ANNOUNCEMENT CARD (Kiri) --- */
+        .dirgahayu-container {
+            /* Background Card (Putih: #FFFFFF) */
+            background-color: #FFFFFF; 
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            padding: 1rem;
+        }
+
+        /* Pita Header Pengumuman */
+        .announcement-header {
+            /* Oranye: #F97316 */
+            background-color: #F97316;
+            /* Putih: #FFFFFF */
+            color: #FFFFFF;
+            padding: 0.5rem 1.5rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-weight: 700;
+            font-size: 1rem;
+            border-top-left-radius: 12px;
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%); 
+            z-index: 20;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .dirgahayu-banner {
+            width: 100%;
+            height: 350px;
+            /* Merah utama: #DC2626, Putih: #FFFFFF */
+            background: url('https://placehold.co/1200x600/DC2626/FFFFFF?text=DIRGAHAYU') no-repeat center center/cover; 
+            border-radius: 8px;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Teks Dirgahayu */
+        .dirgahayu-text {
+            text-align: center;
+            /* Putih: #FFFFFF */
+            color: #FFFFFF;
+            line-height: 1;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.9);
+            margin-top: auto;
+            z-index: 5;
+        }
+
+        .dirgahayu-text .small-text {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 0.25rem 0;
+            /* Putih: #FFFFFF */
+            color: #FFFFFF;
+        }
+
+        .dirgahayu-title {
+            display: block;
+            font-size: 4em;
+            font-weight: 900;
+            /* Putih: #FFFFFF */
+            color: #FFFFFF;
+            margin-top: 10px;
+        }
+
+        .republik-title {
+            display: block;
+            font-size: 2.5em;
+            font-weight: 800;
+            /* Putih: #FFFFFF */
+            color: #FFFFFF;
+            line-height: 1.2;
+            margin-bottom: 0.25rem;
+        }
+
+        .indonesia-title {
+            display: none;
+        }
+
+        /* Tombol Panah Slider */
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            /* Putih: #FFFFFF */
+            color: #FFFFFF;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 30;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        .slider-arrow:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .right-arrow { right: 0.5rem; }
+        .slider-arrow:not(.right-arrow) { left: 0.5rem; }
+
+        /* Announcement Box di Bawah Banner */
+        .announcement-box {
+            /* Background Card (Putih: #FFFFFF) */
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            /* Garis biru tebal: #1D4ED8 */
+            border-left: 5px solid #1D4ED8;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            z-index: 5;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.3s, transform 0.2s;
+            cursor: pointer;
+        }
+        .announcement-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .google-icon-sm {
+            /* Biru gelap: #1D4ED8 */
+            color: #1D4ED8;
+            font-size: 1.5em;
+            padding: 0.5rem;
+            /* Biru sangat muda: #EFF6FF */
+            background-color: #EFF6FF;
+            border-radius: 4px;
+        }
+
+        .announcement-title {
+            font-weight: 700;
+            margin: 0 0 0.25rem 0;
+            /* Biru gelap: #1D4ED8 */
+            color: #1D4ED8;
+            line-height: 1.3;
+        }
+
+        .announcement-excerpt {
+            font-size: 0.85em;
+            margin: 0 0 0.25rem 0;
+            color: #6B7280;
+        }
+
+        .announcement-meta {
+            font-size: 0.75em;
+            color: #9CA3AF;
+        }
+
+        /* --- 3. DATA PENDUDUK CARD (Kanan) --- */
+        .data-penduduk {
+            /* Background Card (Putih: #FFFFFF) */
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .data-penduduk h4 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            padding-bottom: 0.75rem;
+            /* Background Halaman: #F3F4F6 */
+            border-bottom: 2px solid #F3F4F6;
+            margin-bottom: 1.5rem;
+            /* Teks gelap: #1F2937 */
+            color: #1F2937;
+        }
+
+        .chart-area {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Menggambar Pie Chart dengan CSS */
+        .pie-chart-placeholder {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            /* Laki-laki (Biru cerah: #3B82F6) 0% ke 60% | Perempuan (Pink cerah: #ff33a8) 60% ke 100% */
+            background: conic-gradient(
+                #3B82F6 0% 60%, 
+                #ff33a8 60% 100%
+            );
+            /* Background Halaman: #F3F4F6 */
+            box-shadow: 0 0 0 15px #F3F4F6, 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-legend {
+            margin-bottom: 1rem;
+            font-size: 0.9em;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .legend-item {
+            font-weight: 500;
+            /* Teks gelap: #1F2937 */
+            color: #1F2937;
+            display: flex;
+            align-items: center;
+        }
+
+        .legend-item i {
+            font-size: 0.8em;
+            margin-right: 0.5rem;
+        }
+
+        .total-penduduk {
+            font-size: 1.1em;
+            font-weight: 700;
+            /* Teks gelap: #1F2937 */
+            color: #1F2937;
+            padding-top: 1rem;
+            border-top: 1px dashed #E5E7EB;
+            margin-top: 1rem;
+        }
+
+        /* --- 4. RESPONSIVITAS TAMBAHAN --- */
+
+        @media (max-width: 600px) {
+            .dirgahayu-title { font-size: 3em; }
+            .republik-title { font-size: 1.8em; }
+            .small-text { font-size: 1em; }
+            .dirgahayu-banner { height: 280px; }
+        }                 
+        /* --- 6. JADWAL SHOLAT SECTION --- */
+        .jadwal-sholat-container {
+            background-color: var(--color-light);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            overflow: hidden;
+            display: flex; /* Mengatur tata letak header dan times-wrapper */
+        }
+
+        .sholat-header {
+            background-color: #1a73e8; /* Biru/Warna berbeda */
+            color: var(--color-light);
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 1.2em;
+            min-width: 250px; /* Lebar minimum untuk header kiri */
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .sholat-header i {
+            margin-right: 10px;
+        }
+
+        .sholat-times-wrapper {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 10px;
+            flex-grow: 1;
+        }
+
+        .sholat-time-card {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            border-left: 1px solid #eee;
+        }
+
+        .sholat-time-card:first-child {
+            border-left: none;
+        }
+
+        .sholat-time-card i {
+            color: var(--color-primary);
+            font-size: 1.5em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .sholat-time-card span {
+            font-size: 1em;
+            font-weight: bold;
+            color: #666;
+            display: block;
+        }
+
+        .sholat-time-card p {
+            font-size: 1.8em;
+            font-weight: 900;
+            color: var(--color-dark);
+            margin: 5px 0 0 0;
+            line-height: 1;
+        }
+
+        /* --- 7. APARATUR DESA SECTION --- */
+        .aparatur-section {
+            padding: 20px 0 50px 0;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-bottom: 3px solid var(--color-secondary); /* Garis oranye */
+            width: fit-content;
+            line-height: 1.5;
+        }
+
+        .aparatur-card {
+            background-color: var(--color-light);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            overflow: hidden;
+            padding: 30px;
+            gap: 30px;
+        }
+
+        .aparatur-image-container {
+            flex: 1;
+            min-width: 300px; /* Lebar gambar */
+            max-width: 350px;
+            border-radius: 8px;
+            overflow: hidden;
+            /* Ganti dengan gambar ilustrasi Kepala Desa Anda */
+            background: url('images.jpeg') no-repeat center center/cover;
+            height: 350px; /* Tinggi disesuaikan dengan teks di samping */
+            position: relative;
+        }
+
+        /* Teks kecil di atas gambar */
+        .image-text-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: var(--color-dark);
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        /* Konten Sambutan */
+        .sambutan-content {
+            flex: 2;
+            padding-top: 10px;
+        }
+
+        .sambutan-content .sambutan-label {
+            font-size: 0.9em;
+            color: var(--color-secondary); /* Oranye */
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .sambutan-content h3 {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--color-primary); /* Hijau */
+            margin: 0 0 20px 0;
+        }
+
+        .sambutan-content p {
+            font-size: 1em;
+            line-height: 1.8;
+            color: #555;
+            text-align: justify;
+            margin-bottom: 25px;
+            /* Batasi tinggi teks agar terlihat rapi */
+            max-height: 250px; 
+            overflow: hidden; 
+        }
+
+        .tanda-tangan img {
+            height: 50px; /* Ukuran tanda tangan */
+            display: block;
+        }
+        
+        /* --- 8. STRUKTUR ORGANISASI SECTION (BARU) --- */
+        .struktur-section {
+            padding: 30px 20px;
+            background-color: #f8f8f8; /* Background lebih terang untuk memisahkan bagian */
+            position: relative;
+            overflow: hidden; 
+        }
+
+        .struktur-carousel-wrapper {
+            position: relative;
+            padding: 0 60px; /* Ruang untuk tombol panah */
+        }
+        
+        .struktur-carousel {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            overflow-x: auto; /* Memungkinkan scrolling horizontal */
+            scroll-behavior: smooth;
+            /* Menyembunyikan scrollbar bawaan */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+
+        .struktur-carousel::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .aparatur-card-small {
+            flex: 0 0 auto; /* Mencegah kartu mengecil/memanjang */
+            width: 200px; /* Lebar tetap per kartu */
+            background-color: var(--color-light);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .aparatur-card-small:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .aparatur-photo {
+            width: 100%;
+            height: 250px; /* Tinggi foto */
+            overflow: hidden;
+            position: relative;
+            /* Ganti dengan gambar default Anda jika foto spesifik tidak ada */
+            background: url('https://i.imgur.com/pegawai_desa_placeholder.jpg') no-repeat center center/cover; 
+        }
+
+        /* Mengatur ulang posisi background foto */
+        .aparatur-photo.syafirah {
+            background-image: url('download (6).jpeg'); 
+        }
+        .aparatur-photo.syifa {
+            background-image: url('download (6).jpeg'); 
+        }
+        .aparatur-photo.syifa {
+            background-image: url('download (6).jpeg'); 
+        }
+        .aparatur-photo.syifa {
+            background-image: url('download (6).jpeg'); 
+        }
+        .aparatur-photo.syifa {
+            background-image: url('download (6).jpeg'); 
+        }
+        .aparatur-photo.syifa {
+            background-image: url('download (6).jpeg'); 
+        }
+
+        .aparatur-details {
+            padding: 15px 10px;
+        }
+
+        .aparatur-details h4 {
+            font-size: 1em;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            color: var(--color-dark);
+        }
+
+        .aparatur-details p {
+            font-size: 0.9em;
+            color: #666;
+            margin: 0;
+        }
+
+        /* Tombol Navigasi Carousel */
+        .carousel-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .carousel-nav-btn.left {
+            left: 0;
+        }
+
+        .carousel-nav-btn.right {
+            right: 0;
+        }
+        
+        /* Gaya Umum */
+        .news-container {
+            max-width: 1200px; /* Sesuaikan dengan lebar wadah Anda */
+            margin: 20px auto;
+            padding: 0 15px;
+            font-family: sans-serif; /* Ganti font sesuai preferensi */
+        }
+
+        /* Header */
+        .news-header {
+            border-bottom: 3px solid #f99d50; /* Garis Oranye */
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: inline-block; /* Agar garis hanya selebar teks */
+        }
+
+        .news-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Wrapper Konten Utama */
+        .news-content-wrapper {
+            display: flex;
+            gap: 20px; /* Jarak antara card utama dan card samping */
+            align-items: stretch; /* Agar tinggi elemen di flex container sama */
+        }
+
+        /* Card Berita Utama (Kiri) */
+        .news-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex; /* Untuk memisahkan gambar dan body (di card utama) */
+            flex-direction: column;
+        }
+
+        .main-card {
+            flex: 2; /* Mengambil proporsi lebih besar */
+            min-width: 500px;
+        }
+
+        .card-image-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 300px; /* Tinggi gambar di card utama */
+            object-fit: cover;
+            display: block;
+        }
+
+        .new-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: red;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .card-excerpt {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 15px;
+            flex-grow: 1; /* Agar mendorong footer ke bawah */
+        }
+
+        .card-meta {
+            font-size: 0.8em;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .views {
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .views-icon {
+            margin-right: 5px;
+        }
+
+        .read-button {
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .main-button {
+            background-color: #f99d50; /* Warna Oranye */
+            color: white;
+        }
+
+        .main-button:hover {
+            background-color: #e68a40;
+        }
+
+        /* Card Berita Samping (Kanan) */
+        .side-news-wrapper {
+            flex: 1;
+            display: flex;
+            gap: 10px;
+            position: relative; /* Untuk menempatkan tombol navigasi */
+            min-width: 400px;
+            overflow-x: hidden; /* Sembunyikan jika ada card yang bergeser */
+        }
+
+        .side-card {
+            width: 50%; /* Dua card per baris di wrapper */
+            flex-shrink: 0; /* Penting agar tidak mengecil */
+            box-sizing: border-box;
+        }
+
+        .side-card .card-image {
+            height: 180px; /* Tinggi gambar di card samping */
+        }
+
+        .side-card .card-body {
+            padding: 10px;
+        }
+
+        .card-excerpt-short {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .card-footer-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .side-views {
+            align-self: flex-start; /* Taruh jumlah views di kiri bawah gambar */
+            position: absolute;
+            bottom: 55px; /* Sesuaikan jarak dari bawah */
+            left: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .side-card .side-views:nth-child(2) {
+            /* Atur posisi untuk card kedua di samping jika perlu */
+        }
+
+        .side-button {
+            background-color: #f99d50;
+            color: white;
+            width: 100%; /* Lebar penuh */
+            margin-top: 10px;
+        }
+
+        .side-button:hover {
+            background-color: #e68a40;
+        }
+
+        /* Panah Navigasi */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border: none;
+            font-size: 2em;
+            color: #f99d50;
+            cursor: pointer;
+            z-index: 10;
+            padding: 5px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .nav-arrow:hover {
+            opacity: 1;
+        }
+
+        .left-arrow {
+            left: -20px; /* Taruh di luar sedikit */
+        }
+
+        .right-arrow {
+            right: -20px; /* Taruh di luar sedikit */
+        }
+        
+        /* Gaya Umum */
+        .transparency-section {
+            padding: 40px 20px;
+            background-color: #f7f7f7;
+            font-family: sans-serif;
+            color: #333;
+        }
+
+        /* Judul Bagian Atas */
+        .gallery-placeholder {
+            padding: 0 20px;
+        }
+
+        .gallery-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 3px solid #f99d50; /* Garis oranye */
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        /* Judul Utama */
+        .section-header {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 40px;
+        }
+
+        .header-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 3px solid #f99d50;
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        /* Wrapper Card */
+        .card-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        /* Card Individu */
+        .budget-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-subtitle {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #555;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f99d50; /* Garis oranye */
+            width: 80%;
+            line-height: 1.5;
+        }
+
+        /* Lingkaran Progres (SVG) */
+        .progress-ring-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg); /* Memulai progres dari atas */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Lingkaran Latar Belakang (abu-abu) */
+        .ring-bg {
+            fill: none;
+            stroke: #eee; /* Warna abu-abu terang */
+            stroke-width: 15;
+        }
+
+        /* Lingkaran Progres (hijau) */
+        .ring-progress {
+            fill: none;
+            stroke: #38c172; /* Warna hijau terang */
+            stroke-width: 15;
+            stroke-linecap: round;
+            /* Properti penting untuk animasi: */
+            stroke-dasharray: 439.82; /* 2 * PI * r (2 * 3.14159 * 70 = 439.82) */
+            stroke-dashoffset: 439.82; /* Default: tersembunyi sepenuhnya */
+            transition: stroke-dashoffset 2s ease-in-out; /* Durasi animasi */
+        }
+
+        /* Teks di Tengah Lingkaran */
+        .ring-text {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .current-value {
+            font-size: 1.0em;
+            font-weight: 800;
+            color: #333;
+            line-height: 1;
+        }
+
+        .total-value {
+            font-size: 0.5em;
+            color: #999;
+            margin-top: 5px;
+            white-space: nowrap;
+        }
+        
+        /* Gaya Umum Bagian */
+        .synergy-section {
+            background-color: #f0f7f7; /* Warna latar belakang mirip screenshot */
+            padding: 60px 20px;
+            font-family: sans-serif;
+            text-align: center;
+            overflow: hidden; /* Penting untuk menyembunyikan slide yang tidak aktif */
+        }
+
+        /* Judul */
+        .synergy-header {
+            margin-bottom: 40px;
+        }
+
+        .header-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 3px solid #f99d50; /* Garis oranye */
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        /* Container dan Track Slider */
+        .slider-container {
+            max-width: 1000px; /* Lebar maksimum slider */
+            margin: 0 auto;
+            overflow: hidden; /* Menyembunyikan slide di luar area tampilan */
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out; /* Transisi untuk efek slide */
+        }
+
+        .slide-item {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            min-width: 100%; /* Setiap slide mengambil 100% lebar container */
+            flex-shrink: 0; /* Penting agar tidak mengecil */
+            padding: 10px 0;
+        }
+
+        /* Gaya Logo */
+        .slide-item img {
+            max-width: 12%; /* Agar 6 logo muat dalam 100% lebar */
+            height: auto;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)); /* Sedikit bayangan */
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .slide-item img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Pagination Dots */
+        .slider-dots {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            margin: 0 5px;
+            background-color: #a0d4c1; /* Warna dot tidak aktif (biru kehijauan muda) */
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .dot.active {
+            background-color: #f99d50; /* Warna dot aktif (oranye) */
+            transform: scale(1.2);
+        }
+        
+        /* Gaya Bagian Pengaduan */
+        .complaint-hero-section {
+            background: linear-gradient(to right, #e2f7e2, #a8e6a8, #60d394); /* Gradien hijau seperti di screenshot */
+            padding: 30px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #333;
+            font-family: sans-serif;
+            border-radius: 8px; /* Sudut membulat di bagian luar */
+            margin-bottom: 20px;
+        }
+
+        .complaint-content {
+            max-width: 60%;
+        }
+
+        /* Judul Bagian */
+        .complaint-header {
+            border-bottom: 3px solid #f99d50; /* Garis Oranye */
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .header-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .complaint-subtitle {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .complaint-text {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        /* Tombol */
+        .complaint-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #f99d50; /* Warna Oranye */
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .complaint-button:hover {
+            background-color: #e68a40;
+        }
+
+        /* Ilustrasi (Placeholder) */
+        .complaint-illustration {
+            width: 250px;
+            height: 150px;
+            /* Dalam implementasi nyata, Anda akan menggunakan properti 'background-image' 
+               di sini untuk menempatkan ilustrasi (seperti gambar PNG/SVG) 
+            */
+            background-image: url('path/to/illustration.png'); /* Ganti dengan gambar ilustrasi Anda */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        /* Gaya Bagian Footer */
+        .main-footer {
+            background-color: #4a4a4a; /* Warna abu-abu gelap */
+            color: white;
+            padding: 40px 20px 10px;
+            font-family: sans-serif;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Garis tipis di tengah */
+            padding-bottom: 20px;
+        }
+
+        .footer-col {
+            padding: 0 10px;
+        }
+
+        /* Kolom 1: Brand Info */
+        .brand-info {
+            flex-basis: 35%; /* Mengambil ruang lebih besar */
+        }
+
+        .footer-logo {
+            font-size: 2em;
+            font-weight: 800;
+            color: #f99d50; /* Warna Oranye untuk logo */
+            margin-bottom: 5px;
+        }
+
+        .logo-dot {
+            color: white;
+        }
+
+        .brand-text {
+            font-size: 0.9em;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .playstore-badge {
+            width: 150px;
+            height: auto;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .copyright-info {
+            font-size: 0.7em;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        .geodesa-link {
+            color: #f99d50;
+            font-weight: bold;
+        }
+
+        /* Kolom 2 & 3: Menu & Kontak */
+        .menu-links, .contact-info {
+            flex-basis: 25%;
+        }
+
+        .footer-col h3 {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #f99d50; /* Garis oranye di bawah judul kolom */
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .menu-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .menu-links li {
+            margin-bottom: 8px;
+        }
+
+        .menu-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+
+        .menu-links a:hover {
+            color: #f99d50;
+        }
+
+        .list-icon {
+            margin-right: 8px;
+        }
+
+        /* Info Kontak */
+        .social-icons {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            background-color: #38c172; /* Warna hijau */
+            color: white;
+            border-radius: 4px;
+            font-size: 1.1em;
+            text-decoration: none;
+        }
+
+        .contact-detail {
+            font-size: 0.9em;
+            color: #ccc;
+            margin-bottom: 5px;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: white;
+            margin-right: 5px;
+        }
+        
+        /* Responsiveness untuk keseluruhan layout */
+        @media (max-width: 992px) {
+            .main-banner-content {
+                flex-direction: column;
+            }
+            .dirgahayu-banner {
+                height: 250px;
+            }
+            .dirgahayu-title { font-size: 3em; }
+            .republik-title { font-size: 4em; }
+            .indonesia-title { font-size: 6em; }
+
+            .jadwal-sholat-container {
+                flex-direction: column;
+            }
+            .sholat-header {
+                min-width: unset;
+                justify-content: center;
+            }
+            .sholat-times-wrapper {
+                flex-wrap: wrap;
+            }
+            .sholat-time-card {
+                flex-basis: 33%; /* 3 kolom */
+                border-left: none;
+                border-right: none;
+                border-bottom: 1px solid #eee;
+                padding: 15px 0;
+            }
+            
+            /* Responsiveness untuk Aparatur Desa (Sambutan) */
+            .aparatur-card {
+                flex-direction: column;
+                padding: 20px;
+            }
+            .aparatur-image-container {
+                min-width: 100%;
+                max-width: 100%;
+                height: 250px;
+            }
+            .section-title {
+                padding-left: 0;
+            }
+
+            /* Responsiveness untuk Struktur Organisasi */
+            .struktur-carousel-wrapper {
+                padding: 0;
+            }
+            .carousel-nav-btn {
+                top: 30%; /* Pindahkan ke atas sedikit karena kartu lebih pendek */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sholat-time-card {
+                flex-basis: 50%; /* 2 kolom pada layar sangat kecil */
+            }
+            
+            .modules-section {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .module-card {
+                width: calc(25% - 15px);
+                margin-bottom: 10px;
+            }
+            
+            .hero-content h1 {
+                font-size: 1.8em;
+            }
+            
+            .google-icon {
+                font-size: 3.5em;
+            }
+            
+            .news-content-wrapper {
+                flex-direction: column;
+            }
+            
+            .main-card {
+                min-width: 100%;
+            }
+            
+            .side-news-wrapper {
+                min-width: 100%;
+                overflow-x: auto;
+            }
+            
+            .side-card {
+                width: 100%;
+            }
+            
+            .card-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .budget-card {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .complaint-hero-section {
+                flex-direction: column;
+                padding: 20px;
+            }
+            
+            .complaint-content {
+                max-width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .footer-container {
+                flex-direction: column;
+            }
+            
+            .brand-info, .menu-links, .contact-info {
+                flex-basis: 100%;
+                margin-bottom: 20px;
+            }
+        }
+        
+        /* Mobile-specific styles to match the screenshot */
+        @media (max-width: 767px) {
+            /* Top bar adjustments */
+            .top-bar {
+                padding: 8px 15px;
+                font-size: 0.8em;
+            }
+            
+            .top-bar-left span {
+                margin-right: 10px;
+            }
+            
+            /* Navigation adjustments */
+            .main-nav {
+                padding: 0 15px;
+                height: auto;
+                flex-direction: column;
+            }
+            
+            .logo {
+                margin-bottom: 10px;
+                align-items: center;
+            }
+            
+            .logo-main {
+                font-size: 1.3em;
+            }
+            
+            .logo-sub {
+                font-size: 0.7em;
+            }
+            
+            .menu-list {
+                display: none;
+                width: 100%;
+                margin-left: 0;
+                flex-direction: column;
+            }
+            
+            .menu-list.active {
+                display: flex;
+            }
+            
+            .menu-list li a {
+                padding: 12px 15px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .btn-pengaduan {
+                margin-top: 10px;
+                padding: 8px 20px;
+                font-size: 0.9em;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+                position: absolute;
+                right: 15px;
+                top: 15px;
+            }
+            
+            /* Hero section adjustments */
+            .hero-section {
+                height: 50vh;
+            }
+            
+            .hero-content {
+                padding: 0 15px;
+            }
+            
+            .google-icon {
+                font-size: 3em;
+            }
+            
+            .hero-content h1 {
+                font-size: 1.5em;
+            }
+            
+            .hero-content p {
+                font-size: 0.9em;
+            }
+            
+            .search-box {
+                width: 95%;
+                padding: 8px 15px;
+            }
+            
+            /* Modules section adjustments */
+            .modules-container {
+                transform: translateY(-30px);
+            }
+            
+            .modules-section {
+                padding: 15px;
+                gap: 10px;
+            }
+            
+            .module-card {
+                width: calc(25% - 10px);
+                padding: 5px 0;
+            }
+            
+            .icon-wrapper {
+                width: 45px;
+                height: 45px;
+                font-size: 1.8em;
+                padding: 10px;
+            }
+            
+            .module-card span {
+                font-size: 0.75em;
+            }
+            
+            /* Content adjustments */
+            .content-wrapper {
+                padding: 1rem;
+            }
+            
+            .main-content-section {
+                padding-top: 1rem;
+            }
+            
+            /* Banner adjustments */
+            .dirgahayu-container {
+                padding: 0.5rem;
+            }
+            
+            .dirgahayu-banner {
+                height: 200px;
+            }
+            
+            .dirgahayu-title {
+                font-size: 2.5em;
+            }
+            
+            .republik-title {
+                font-size: 1.5em;
+            }
+            
+            .small-text {
+                font-size: 0.9em;
+            }
+            
+            .announcement-box {
+                padding: 0.8rem;
+            }
+            
+            .announcement-title {
+                font-size: 0.9em;
+            }
+            
+            .announcement-excerpt {
+                font-size: 0.75em;
+            }
+            
+            /* Data penduduk adjustments */
+            .data-penduduk {
+                padding: 1rem;
+            }
+            
+            .data-penduduk h4 {
+                font-size: 1.1em;
+            }
+            
+            .chart-area {
+                height: 150px;
+            }
+            
+            .pie-chart-placeholder {
+                width: 120px;
+                height: 120px;
+            }
+            
+            /* Jadwal sholat adjustments */
+            .jadwal-sholat-container {
+                flex-direction: column;
+            }
+            
+            .sholat-header {
+                min-width: 100%;
+                padding: 10px 15px;
+                font-size: 1em;
+            }
+            
+            .sholat-times-wrapper {
+                flex-wrap: wrap;
+                padding: 10px 5px;
+            }
+            
+            .sholat-time-card {
+                flex-basis: 33.33%;
+                padding: 8px 0;
+                border-left: none;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .sholat-time-card i {
+                font-size: 1.2em;
+            }
+            
+            .sholat-time-card span {
+                font-size: 0.8em;
+            }
+            
+            .sholat-time-card p {
+                font-size: 1.4em;
+            }
+            
+            /* Aparatur section adjustments */
+            .aparatur-section {
+                padding: 15px 0;
+            }
+            
+            .section-title {
+                font-size: 1.5em;
+                padding-left: 15px;
+            }
+            
+            .aparatur-card {
+                padding: 15px;
+                gap: 15px;
+            }
+            
+            .aparatur-image-container {
+                min-width: 100%;
+                max-width: 100%;
+                height: 200px;
+            }
+            
+            .sambutan-content h3 {
+                font-size: 1.2em;
+            }
+            
+            .sambutan-content p {
+                font-size: 0.9em;
+                max-height: 150px;
+            }
+            
+            /* Struktur organisasi adjustments */
+            .struktur-section {
+                padding: 20px 15px;
+            }
+            
+            .struktur-carousel-wrapper {
+                padding: 0 40px;
+            }
+            
+            .aparatur-card-small {
+                width: 150px;
+            }
+            
+            .aparatur-photo {
+                height: 180px;
+            }
+            
+            .aparatur-details h4 {
+                font-size: 0.9em;
+            }
+            
+            .aparatur-details p {
+                font-size: 0.8em;
+            }
+            
+            /* News section adjustments */
+            .news-container {
+                padding: 0 10px;
+            }
+            
+            .news-title {
+                font-size: 1.3em;
+            }
+            
+            .news-content-wrapper {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .main-card {
+                min-width: 100%;
+            }
+            
+            .card-image {
+                height: 200px;
+            }
+            
+            .card-title {
+                font-size: 1em;
+            }
+            
+            .card-excerpt {
+                font-size: 0.8em;
+            }
+            
+            .side-news-wrapper {
+                min-width: 100%;
+                gap: 10px;
+            }
+            
+            .side-card {
+                width: calc(50% - 5px);
+            }
+            
+            .side-card .card-image {
+                height: 120px;
+            }
+            
+            /* Transparency section adjustments */
+            .transparency-section {
+                padding: 20px 10px;
+            }
+            
+            .header-title {
+                font-size: 1.5em;
+            }
+            
+            .budget-card {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .card-subtitle {
+                font-size: 1em;
+            }
+            
+            .progress-ring-container {
+                width: 140px;
+                height: 140px;
+            }
+            
+            /* Synergy section adjustments */
+            .synergy-section {
+                padding: 30px 10px;
+            }
+            
+            .header-title {
+                font-size: 1.5em;
+            }
+            
+            .slide-item img {
+                max-width: 15%;
+            }
+            
+            /* Complaint section adjustments */
+            .complaint-hero-section {
+                padding: 20px;
+            }
+            
+            .complaint-subtitle {
+                font-size: 1.2em;
+            }
+            
+            .complaint-text {
+                font-size: 0.9em;
+            }
+            
+            .complaint-button {
+                padding: 10px 20px;
+            }
+            
+            /* Footer adjustments */
+            .footer-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .brand-info, .menu-links, .contact-info {
+                flex-basis: 100%;
+            }
+            
+            .footer-logo {
+                font-size: 1.8em;
+            }
+            
+            .brand-text {
+                font-size: 0.85em;
+            }
+            
+            .playstore-badge {
+                width: 120px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .module-card {
+                width: calc(50% - 10px);
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+            }
+            
+            .top-bar-left {
+                margin-bottom: 10px;
+            }
+            
+            .sholat-time-card {
+                flex-basis: 50%; /* 2 kolom pada layar sangat kecil */
+            }
+        }
+        
+        /* Tambahan CSS untuk slider pengumuman */
+        .banner-slider-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .banner-slides {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+        
+        .banner-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .banner-slide-1 {
+            background: url('https://placehold.co/1200x600/DC2626/FFFFFF?text=DIRGAHAYU') no-repeat center center/cover;
+        }
+        
+        .banner-slide-2 {
+            background: url('https://placehold.co/1200x600/1E40AF/FFFFFF?text=INDEPENDENCE') no-repeat center center/cover;
+        }
+        
+        .banner-slide-3 {
+            background: url('https://placehold.co/1200x600/047857/FFFFFF?text=INDONESIA') no-repeat center center/cover;
+        }
+        
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .slide-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 30;
+        }
+        
+        .slide-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .slide-dot.active {
+            background-color: white;
+        }
+        
+        .announcement-slides {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .announcement-slide {
+            min-width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <span>geodesa.id</span>
+                <span>| +62 82345xxxxx</span>
+            </div>
+            <div class="social-icons">
+                <i class="fab fa-whatsapp"></i>
+                <i class="fab fa-facebook-f"></i>
+                <i class="fab fa-twitter"></i>
+            </div>
+        </div>
+        
+        <nav class="main-nav">
+            <div class="logo">
+                <span class="logo-main">GODESA.ID</span>
+                <span class="logo-sub">Desa Rajagaluh-kidul</span>
+            </div>
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="menu-list">
+                <li><a href="#"><i class="fas fa-home"></i> Profile Desa</a></li>
+                <li><a href="h.html">Informasi Desa</a></li>
+                <li><a href="data-statistik.html">Data Statistik</a></li>
+                <li><a href="#">Kontak</a></li>
+            </ul>
+            <a href="pengaduan.html" class="btn-pengaduan">Buat Pengaduan</a>
+        </nav>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="google-icon">G</div>
+            <h1>Sistem Informasi Desa GEODESA.id</h1>
+            <p>GEODESA.ID</p>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Cari informasi yang anda butuhkan disini...">
+            </div>
+        </div>
+    </section>
+
+    <div class="modules-container">
+        <section class="modules-section">
+            
+            <a href="galeri.html" class="module-card">
+                <div class="icon-wrapper"><i class="fas fa-camera"></i></div>
+                <span>Gallery</span>
+            </a>
+            
+            <a href="berita.html" class="module-card">
+                <div class="icon-wrapper"><i class="fas fa-newspaper"></i></div>
+                <span>Berita</span>
+            </a>
+            
+            <a href="pengaduan.html" class="module-card">
+                <div class="icon-wrapper"><i class="fas fa-clipboard-list"></i></div>
+                <span>Pengaduan</span>
+            </a>
+            
+            <a href="produk.html" class="module-card">
+                <div class="icon-wrapper"><i class="fas fa-shopping-cart"></i></div>
+                <span>Produk</span>
+            </a>
+            
+            <a href="#" class="module-card">
+                <div class="icon-wrapper"><i class="fas fa-envelope-open-text"></i></div>
+                <span>Berita</span>
+            </a>
+            
+            <a href="pengumuman.html" class="module-card">
+                <div class="icon-wrapper"><i class="fas fa-bullhorn"></i></div>
+                <span>Pengumuman</span>
+            </a>
+            
+            <a href="bantuan.html" class="module-card">
+                <div class="icon-wrapper"><i class="fas fa-tools"></i></div>
+                <span>Bantuan</span>
+            </a>
+            
+            <a href="peta.html" class="module-card">
+                <div class="icon-wrapper"><i class="fas fa-map-marker-alt"></i></div>
+                <span>Peta</span>
+            </a>
+
+        </section>
+    </div>
+    
+    <main class="content-wrapper">
+        <section class="main-content-section">
+            
+            <div class="dirgahayu-container">
+                <div class="announcement-header">Pengumuman Desa</div>
+                <div class="main-banner-content">
+                    
+                    <div class="dirgahayu-banner">
+                        <div class="banner-slider-container">
+                            <div class="banner-slides" id="bannerSlides">
+                                <div class="banner-slide banner-slide-1">
+                                    <div class="banner-overlay">
+                                        <div class="dirgahayu-text">
+                                            <p class="small-text">PULIH LEBIH CEPAT</p>
+                                            <p class="small-text">BANGKIT LEBIH KUAT</p>
+                                            
+                                            <span class="dirgahayu-title">DIRGAHAYU</span>
+                                            <span class="republik-title">REPUBLIK</span>
+                                            <span class="indonesia-title">INDONESIA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="banner-slide banner-slide-2">
+                                    <div class="banner-overlay">
+                                        <div class="dirgahayu-text">
+                                            <p class="small-text">MERDEKA BELAJAR</p>
+                                            <p class="small-text">MERDEKA BERKARYA</p>
+                                            
+                                            <span class="dirgahayu-title">KEMERDEKAAN</span>
+                                            <span class="republik-title">INDONESIA</span>
+                                            <span class="indonesia-title">KE-78</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="banner-slide banner-slide-3">
+                                    <div class="banner-overlay">
+                                        <div class="dirgahayu-text">
+                                            <p class="small-text">SATU TEKAD</p>
+                                            <p class="small-text">SATU KARYA</p>
+                                            
+                                            <span class="dirgahayu-title">BANGSA</span>
+                                            <span class="republik-title">INDONESIA</span>
+                                            <span class="indonesia-title">MAJU</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <i class="fas fa-chevron-left slider-arrow" id="prevSlide"></i>
+                            <i class="fas fa-chevron-right slider-arrow right-arrow" id="nextSlide"></i>
+                            
+                            <div class="slide-dots">
+                                <span class="slide-dot active" data-slide="0"></span>
+                                <span class="slide-dot" data-slide="1"></span>
+                                <span class="slide-dot" data-slide="2"></span>
+                            </div>
+                        </div>
+
+                        <div class="announcement-box-container">
+                            <div class="announcement-slides" id="announcementSlides">
+                                <div class="announcement-slide">
+                                    <div class="announcement-box">
+                                        <i class="fab fa-google google-icon-sm"></i>
+                                        <div>
+                                            <p class="announcement-title">Pengumuman #1</p>
+                                            <p class="announcement-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus...</p>
+                                            <span class="announcement-meta"><i class="far fa-clock"></i> 2023-08-17T10:00 | <i class="far fa-eye"></i> Baca Pengumuman....</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="announcement-slide">
+                                    <div class="announcement-box">
+                                        <i class="fab fa-google google-icon-sm"></i>
+                                        <div>
+                                            <p class="announcement-title">Pengumuman #2</p>
+                                            <p class="announcement-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus...</p>
+                                            <span class="announcement-meta"><i class="far fa-clock"></i> 2023-08-17T10:00 | <i class="far fa-eye"></i> Baca Pengumuman....</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="announcement-slide">
+                                    <div class="announcement-box">
+                                        <i class="fab fa-google google-icon-sm"></i>
+                                        <div>
+                                            <p class="announcement-title">Pengumuman #3</p>
+                                            <p class="announcement-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus...</p>
+                                            <span class="announcement-meta"><i class="far fa-clock"></i> 2023-08-17T10:00 | <i class="far fa-eye"></i> Baca Pengumuman....</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="data-penduduk">
+                        <h4>Data Penduduk Desa</h4>
+                        <div class="chart-area">
+                            <div class="pie-chart-placeholder"></div>
+                        </div>
+                        <div class="chart-legend">
+                            <span class="legend-item"><i class="fas fa-square" style="color: var(--color-primary);"></i> Laki-Laki</span>
+                            <span class="legend-item"><i class="fas fa-square" style="color: #ff33a8;"></i> Perempuan</span>
+                        </div>
+                        <p class="total-penduduk">Total Penduduk: **550**</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="jadwal-sholat-container">
+                <div class="sholat-header">
+                    <i class="far fa-clock"></i>
+                    Jadwal Sholat di RRDesa.id
+                </div>
+                <div class="sholat-times-wrapper">
+                    <div class="sholat-time-card">
+                        <i class="fas fa-mosque"></i>
+                        <span>Imsak</span>
+                        <p>04 : 32</p>
+                    </div>
+                    <div class="sholat-time-card">
+                        <i class="fas fa-mosque"></i>
+                        <span>Subuh</span>
+                        <p>04 : 40</p>
+                    </div>
+                    <div class="sholat-time-card">
+                        <i class="fas fa-mosque"></i>
+                        <span>Dzuhur</span>
+                        <p>11 : 59</p>
+                    </div>
+                    <div class="sholat-time-card">
+                        <i class="fas fa-mosque"></i>
+                        <span>Ashar</span>
+                        <p>15 : 20</p>
+                    </div>
+                    <div class="sholat-time-card">
+                        <i class="fas fa-mosque"></i>
+                        <span>Maghrib</span>
+                        <p>17 : 56</p>
+                    </div>
+                    <div class="sholat-time-card">
+                        <i class="fas fa-mosque"></i>
+                        <span>Isya</span>
+                        <p>19 : 07</p>
+                    </div>
+                </div>
+            </div>
+            
+            <section class="aparatur-section">
+                <h2 class="section-title">Aparatur Desa</h2>
+                <div class="aparatur-card">
+                    <div class="aparatur-image-container">
+                        <div class="image-text-overlay">Kepala Desa</div>
+                        </div>
+
+                    <div class="sambutan-content">
+                        <div class="sambutan-label">Sambutan Pemimpin Desa.</div>
+                        <h3>Bambang Krisna SP.D</h3>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus.
+                        </p>
+                        <div class="tanda-tangan">
+                            <img src="download (4).jpeg" alt="Tanda Tangan Kepala Desa">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="struktur-section">
+                <h2 class="section-title">Struktur Organisasi Desa</h2>
+                
+                <div class="struktur-carousel-wrapper">
+                    <button class="carousel-nav-btn left" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
+                    
+                    <div class="struktur-carousel" id="aparaturCarousel">
+                        
+                        <div class="aparatur-card-small">
+                              
+                            <div class="aparatur-photo syafirah"></div>
+                            <div class="aparatur-details">
+                                <h4>Syafira Arifa</h4>
+                                <p>Kasi Pelayanan</p>
+                            </div>
+                        </div>
+                        
+                        <div class="aparatur-card-small">
+                            <div class="aparatur-photo syifa"></div>
+                            <div class="aparatur-details">
+                                <h4>Syifa Azzahra</h4>
+                                <p>Kasi Pelayanan</p>
+                            </div>
+                        </div>
+                        
+                        <div class="aparatur-card-small">
+                            <div class="aparatur-photo syifa"></div>
+                            <div class="aparatur-details">
+                                <h4>Syifa Azzahra</h4>
+                                <p>Kasi Pelayanan</p>
+                            </div>
+                        </div>
+                        
+                        <div class="aparatur-card-small">
+                            <div class="aparatur-photo syifa"></div>
+                            <div class="aparatur-details">
+                                <h4>Syifa Azzahra</h4>
+                                <p>Kasi Pelayanan</p>
+                            </div>
+                        </div>
+
+                        <div class="aparatur-card-small">
+                            <div class="aparatur-photo syifa"></div>
+                            <div class="aparatur-details">
+                                <h4>Syifa Azzahra</h4>
+                                <p>Kasi Pelayanan</p>
+                            </div>
+                        </div>
+
+                        <div class="aparatur-card-small">
+                            <div class="aparatur-photo syifa"></div>
+                            <div class="aparatur-details">
+                                <h4>syifa azzahra</h4>
+                                <p>Kaur Keuangan</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <button class="carousel-nav-btn right" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            <div class="news-container">
+    <div class="news-header">
+        <span class="news-title">Berita Desa</span>
+    </div>
+
+    <div class="news-content-wrapper">
+        <div class="news-card main-card">
+            <div class="card-image-wrapper">
+                <img src="images (4).jpeg" alt="Gambar Berita 1" class="card-image">
+                <span class="new-tag">NEW!</span>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">Mendes PDTT : 20 Persen Dana Desa Harus Di...</h3>
+                <p class="card-excerpt">Menteri Desa, Pembangunan Daerah Tertinggal dan Transmigrasi (Mendes PDTT) Abdul Halim Iskandar menegaskan manfaat dana desa untuk mendorong ketahanan pangan nasional...</p>
+                <div class="card-meta">
+                    <span class="meta-admin">Admin : Rian</span>
+                    <span class="meta-date">Post Date: August 8, 2023</span>
+                </div>
+                <div class="card-footer">
+                    <div class="views">
+                        <span class="views-icon">👁️</span> 
+                        <span class="views-count">332</span>
+                    </div>
+                    <a href="berita.html" class="read-button main-button">Baca Berita 📜</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-news-wrapper">
+            <button class="nav-arrow left-arrow">〈</button>
+
+            <div class="news-card side-card">
+                <div class="card-image-wrapper">
+                    <img src="images.png" alt="Gambar Berita 2" class="card-image">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Mendes PDTT ...</h3>
+                    <p class="card-excerpt-short">Menteri Desa, Pembangunan Daerah Tertinggal dan Transmigrasi (Mendes PDTT) Abdul Halim Iskandar...</p>
+                    <div class="card-footer-side">
+                        <div class="views side-views">
+                            <span class="views-count">216</span>
+                        </div>
+                        <a href="berita.html" class="read-button side-button">Baca 📜</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-card side-card">
+                <div class="card-image-wrapper">
+                    <img src="images.png" alt="Gambar Berita 3" class="card-image">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Mendes PDTT ...</h3>
+                    <p class="card-excerpt-short">Menteri Desa, Pembangunan Daerah Tertinggal dan Transmigrasi (Mendes PDTT) Abdul Halim Iskandar...</p>
+                    <div class="card-footer-side">
+                        <div class="views side-views">
+                            <span class="views-count">247</span>
+                        </div>
+                        <a href="berita.html" class="read-button side-button">Baca 📜</a>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-arrow right-arrow">〉</button>
+        </div>
+
+    </div>
+</div>
+            <div class="transparency-section">
+    <div class="section-header">
+        <span class="header-title">Transparansi Anggaran</span>
+    </div>
+
+    <div class="gallery-placeholder">
+        <span class="gallery-title"></span>
+    </div>
+
+    <div class="card-wrapper">
+
+        <div class="budget-card" data-target-value="760664335" data-total-value="827186422">
+            <h3 class="card-subtitle">APBDES 2023 Pendapatan</h3>
+            <div class="progress-ring-container">
+                <svg class="progress-ring" width="160" height="160">
+                    <circle class="ring-bg" cx="80" cy="80" r="70"></circle>
+                    <circle class="ring-progress" cx="80" cy="80" r="70"></circle>
+                </svg>
+                <div class="ring-text">
+                    <span class="current-value" data-currency="Rp">0</span>
+                    <span class="total-value">Total : Rp. 827186422</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="budget-card" data-target-value="54150000" data-total-value="182425563">
+            <h3 class="card-subtitle">APBDES 2023 Pelaksanaan</h3>
+            <div class="progress-ring-container">
+                <svg class="progress-ring" width="160" height="160">
+                    <circle class="ring-bg" cx="80" cy="80" r="70"></circle>
+                    <circle class="ring-progress" cx="80" cy="80" r="70"></circle>
+                </svg>
+                <div class="ring-text">
+                    <span class="current-value" data-currency="Rp">0</span>
+                    <span class="total-value">Total : Rp. 182425563</span>
+                </div>
+            </div>
+        </div>
+
+       <div class="budget-card" data-target-value="90150000" data-total-value="6002425563">
+            <h3 class="card-subtitle">APBDES 2023 pembelanjaan</h3>
+            <div class="progress-ring-container">
+                <svg class="progress-ring" width="160" height="160">
+                    <circle class="ring-bg" cx="80" cy="80" r="70"></circle>
+                    <circle class="ring-progress" cx="80" cy="80" r="70"></circle>
+                </svg>
+                <div class="ring-text">
+                    <span class="current-value" data-currency="Rp">0</span>
+                    <span class="total-value">Total : Rp. 182425563</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <div class="synergy-section">
+    <div class="synergy-header">
+        <span class="header-title">Program Sinergi</span>
+    </div>
+
+    <div class="slider-container">
+        <div class="slider-track">
+            <div class="slide-item active">
+                <img src="path/to/logo1.png" alt="Logo Sinergi 1">
+                <img src="path/to/logo2.png" alt="Logo Sinergi 2">
+                <img src="path/to/logo3.png" alt="Logo Sinergi 3">
+                <img src="path/to/logo4.png" alt="Logo Sinergi 4">
+                <img src="path/to/logo5.png" alt="Logo Sinergi 5">
+                <img src="path/to/logo6.png" alt="Logo Sinergi 6">
+            </div>
+            
+            <div class="slide-item">
+                <img src="path/to/logoA.png" alt="Logo Sinergi A">
+                <img src="path/to/logoB.png" alt="Logo Sinergi B">
+                <img src="path/to/logoC.png" alt="Logo Sinergi C">
+                <img src="path/to/logoD.png" alt="Logo Sinergi D">
+                <img src="path/to/logoE.png" alt="Logo Sinergi E">
+                <img src="path/to/logoF.png" alt="Logo Sinergi F">
+            </div>
+        </div>
+    </div>
+
+    <div class="slider-dots">
+        <span class="dot active" data-slide="0"></span>
+        <span class="dot" data-slide="1"></span>
+        </div>
+</div>
+<div class="complaint-hero-section">
+    <div class="complaint-content">
+        <div class="complaint-header">
+            <span class="header-title">Pengaduan Desa</span>
+        </div>
+        
+        <h2 class="complaint-subtitle">Apabila Anda Memiliki Keluhan dan Dan Permasalahan bisa klik button di bawah ini !</h2>
+        <p class="complaint-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed egestas felis nec massa ornare blandit.</p>
+        
+        <a href="pengaduan.html" class="complaint-button">Buat Pengaduan</a>
+    </div>
+
+    <div class="complaint-illustration">
+        </div>
+</div>
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-col brand-info">
+            <div class="footer-logo">GEODES<span class="logo-dot">A</span>.ID</div>
+            <p class="brand-text">GEODESA.ID</p>
+            <a href="#">
+                <img src="path/to/google-play-badge.png" alt="Tersedia di Google Play" class="playstore-badge">
+            </a>
+            <p class="copyright-info">
+                 | All rights reserved | Made with ❤️ by <span class="geodesa-link">GEODESA.ID</span>
+            </p>
+        </div>
+
+        <div class="footer-col menu-links">
+            <h3>Menu Lainnya</h3>
+            <ul>
+                <li><a href="#"><span class="list-icon">🟢</span> Pengumuman</a></li>
+                <li><a href="#"><span class="list-icon">🟢</span> Visi & Misi</a></li>
+                <li><a href="#"><span class="list-icon">🟢</span> Sejarah Desa</a></li>
+                <li><a href="#"><span class="list-icon">🟢</span> Aparatur Desa</a></li>
+                <li><a href="#"><span class="list-icon">🟢</span> Produk Desa</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col contact-info">
+            <h3>Hubungi Kami</h3>
+            <div class="social-icons">
+                <a href="#" class="social-icon youtube">▶️</a>
+                <a href="#" class="social-icon instagram">📷</a>
+                <a href="#" class="social-icon twitter">🐦</a>
+            </div>
+            <p class="contact-detail">
+                <span class="detail-label">Email :</span> geodesa.id
+            </p>
+            <p class="contact-detail">
+                <span class="detail-label">WA :</span> +62 82345xxxxx
+            </p>
+        </div>
+    </div>
+</footer>
+            
+        </section>
+        
+    </main>
+
+    <script>    
+        // Mobile menu toggle
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const menuList = document.querySelector('.menu-list');
+        
+        mobileMenuToggle.addEventListener('click', function() {
+            menuList.classList.toggle('active');
+        });
+        
+        // Banner slider functionality
+        const bannerSlides = document.getElementById('bannerSlides');
+        const announcementSlides = document.getElementById('announcementSlides');
+        const prevSlideBtn = document.getElementById('prevSlide');
+        const nextSlideBtn = document.getElementById('nextSlide');
+        const slideDots = document.querySelectorAll('.slide-dot');
+        
+        let currentSlide = 0;
+        const totalSlides = 3;
+        
+        // Function to go to a specific slide
+        function goToSlide(slideIndex) {
+            if (slideIndex < 0) {
+                slideIndex = totalSlides - 1;
+            } else if (slideIndex >= totalSlides) {
+                slideIndex = 0;
+            }
+            
+            currentSlide = slideIndex;
+            
+            // Update banner slides
+            bannerSlides.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update announcement slides
+            announcementSlides.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update dots
+            slideDots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        // Event listeners for arrow buttons
+        prevSlideBtn.addEventListener('click', () => {
+            goToSlide(currentSlide - 1);
+        });
+        
+        nextSlideBtn.addEventListener('click', () => {
+            goToSlide(currentSlide + 1);
+        });
+        
+        // Event listeners for dots
+        slideDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                goToSlide(index);
+            });
+        });
+        
+        // Auto-play slider
+        let slideInterval = setInterval(() => {
+            goToSlide(currentSlide + 1);
+        }, 5000);
+        
+        // Pause auto-play when user interacts with slider
+        bannerSlides.addEventListener('mouseenter', () => {
+            clearInterval(slideInterval);
+        });
+        
+        bannerSlides.addEventListener('mouseleave', () => {
+            slideInterval = setInterval(() => {
+                goToSlide(currentSlide + 1);
+            }, 5000);
+        });
+        
+        prevSlideBtn.addEventListener('mouseenter', () => {
+            clearInterval(slideInterval);
+        });
+        
+        nextSlideBtn.addEventListener('mouseenter', () => {
+            clearInterval(slideInterval);
+        });
+        
+        const sliderTrack = document.querySelector('.slider-track');
+        const dotsContainer = document.querySelector('.slider-dots');
+        const slides = document.querySelectorAll('.slide-item');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides2 = slides.length;
+        let currentIndex = 0;
+        let autoSlideInterval;
+
+        /**
+         * Menggeser slider ke index tertentu
+         * @param {number} index - Index slide yang dituju
+         */
+        function goToSlide2(index) {
+            // Memastikan index tidak melebihi batas
+            if (index >= totalSlides2) {
+                index = 0; // Kembali ke slide pertama (loop)
+            } else if (index < 0) {
+                index = totalSlides2 - 1; // Kembali ke slide terakhir
+            }
+            
+            currentIndex = index;
+            
+            // Hitung pergeseran (transform)
+            const offset = -currentIndex * 100;
+            sliderTrack.style.transform = `translateX(${offset}%)`;
+
+            // Update kelas active pada dots
+            dots.forEach((dot, i) => {
+                dot.classList.remove('active');
+                if (i === currentIndex) {
+                    dot.classList.add('active');
+                }
+            });
+        }
+
+        /**
+         * Fungsi untuk mengaktifkan Autoplay (slide otomatis)
+         */
+        function startAutoplay() {
+            // Hapus interval lama jika ada
+            clearInterval(autoSlideInterval); 
+            
+            // Set interval baru (contoh: geser setiap 3 detik)
+            autoSlideInterval = setInterval(() => {
+                goToSlide2(currentIndex + 1);
+            }, 3000); // 3000ms = 3 detik
+        }
+
+        /**
+         * Fungsi untuk menghentikan Autoplay saat interaksi manual
+         */
+        function stopAutoplay() {
+            clearInterval(autoSlideInterval);
+        }
+
+
+        // --- 1. SLIDE MANUAL VIA DOTS ---
+        dotsContainer.addEventListener('click', (event) => {
+            if (event.target.classList.contains('dot')) {
+                stopAutoplay(); // Hentikan autoplay saat user klik manual
+                const slideIndex = parseInt(event.target.dataset.slide);
+                goToSlide2(slideIndex);
+                startAutoplay(); // Mulai lagi autoplay setelah interaksi manual
+            }
+        });
+
+
+        // --- 2. SLIDE MANUAL VIA DRAG/SWIPE (Opsional) ---
+        // Membuat slider bisa digeser manual (swipe)
+        let isDragging = false;
+        let startPos = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let animationID;
+
+        sliderTrack.addEventListener('mousedown', startDrag);
+        sliderTrack.addEventListener('mouseup', endDrag);
+        sliderTrack.addEventListener('mousemove', drag);
+        sliderTrack.addEventListener('mouseleave', endDrag); // Jika mouse keluar area
+
+        // Dukungan sentuhan untuk mobile
+        sliderTrack.addEventListener('touchstart', startDrag);
+        sliderTrack.addEventListener('touchend', endDrag);
+        sliderTrack.addEventListener('touchmove', drag);
+
+
+        function getPositionX(event) {
+            return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+        }
+
+        function setSliderPosition() {
+            sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
+        }
+
+        function startDrag(event) {
+            stopAutoplay();
+            isDragging = true;
+            startPos = getPositionX(event);
+            sliderTrack.classList.add('grabbing');
+            // Mencegah animasi CSS saat drag
+            cancelAnimationFrame(animationID);
+        }
+
+        function drag(event) {
+            if (!isDragging) return;
+            
+            const currentPosition = getPositionX(event);
+            const diff = currentPosition - startPos;
+            
+            // Hitung posisi baru relatif terhadap slide saat ini
+            const trackWidth = sliderTrack.offsetWidth;
+            currentTranslate = prevTranslate + diff;
+            
+            setSliderPosition();
+        }
+
+        function endDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            const movedBy = currentTranslate - prevTranslate;
+            const slideWidth = slides[0].offsetWidth; // Lebar satu slide
+            
+            // Tentukan apakah harus geser ke slide berikutnya atau sebelumnya
+            if (movedBy < -50) { // Geser ke kiri (slide berikutnya)
+                goToSlide2(currentIndex + 1);
+            } else if (movedBy > 50) { // Geser ke kanan (slide sebelumnya)
+                goToSlide2(currentIndex - 1);
+            } else {
+                // Kembali ke posisi slide saat ini jika geseran terlalu sedikit
+                goToSlide2(currentIndex);
+            }
+
+            // Set prevTranslate ke posisi slide yang baru
+            prevTranslate = -currentIndex * slideWidth;
+            
+            startAutoplay(); // Mulai lagi autoplay
+        }
+
+
+        // --- 3. INISIALISASI ---
+        // Mulai Autoplay saat halaman dimuat
+        startAutoplay();
+
+        const cards = document.querySelectorAll('.budget-card');
+        const circumference = 439.82; // 2 * PI * r (r=70)
+
+        /**
+         * Mengubah angka menjadi format Rupiah (IDR)
+         * @param {number} number - Angka yang akan diformat.
+         * @returns {string} - Angka dalam format Rupiah.
+         */
+        function formatCurrency(number) {
+            return number.toLocaleString('id-ID', { maximumFractionDigits: 0 });
+        }
+
+        /**
+         * Fungsi untuk menganimasikan lingkaran progres (ring progress bar)
+         * @param {HTMLElement} card - Elemen card yang sedang diproses.
+         */
+        function animateProgress(card) {
+            const targetValue = parseInt(card.dataset.targetValue);
+            const totalValue = parseInt(card.dataset.totalValue);
+            const percentage = (targetValue / totalValue) * 100;
+            const offset = circumference - (percentage / 100) * circumference;
+
+            const progressRing = card.querySelector('.ring-progress');
+            const currentValueSpan = card.querySelector('.current-value');
+            const currencySymbol = currentValueSpan.dataset.currency || '';
+
+            // 1. ANMASI LINGKARAN (RING PROGRESS)
+            // Mengatur stroke-dashoffset untuk mengisi lingkaran
+            progressRing.style.strokeDashoffset = offset;
+
+            // 2. ANMASI ANGKA BERJALAN (COUNTING UP)
+            let startValue = 0;
+            const duration = 2000; // Durasi animasi dalam milidetik (2 detik)
+            const startTime = performance.now();
+
+            function step(currentTime) {
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(1, elapsedTime / duration);
+                
+                // Nilai saat ini (interpolasi dari 0 ke targetValue)
+                const currentAnimatedValue = Math.floor(progress * targetValue);
+
+                // Update tampilan angka
+                currentValueSpan.textContent = currencySymbol + ' ' + formatCurrency(currentAnimatedValue);
+
+                // Lanjutkan animasi jika belum selesai
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    // Pastikan angka terakhir adalah targetValue yang sebenarnya
+                    currentValueSpan.textContent = currencySymbol + ' ' + formatCurrency(targetValue);
+                    
+                    // Opsional: Perbarui Total di bawah (jika perlu diformat)
+                    const totalValueSpan = card.querySelector('.total-value');
+                    totalValueSpan.textContent = `Total : ${currencySymbol} ${formatCurrency(totalValue)}`;
+                }
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        // Jalankan animasi untuk semua card
+        cards.forEach(card => {
+            // Tambahkan delay kecil agar terlihat berurutan atau jeda sedikit
+            setTimeout(() => {
+                animateProgress(card);
+            }, 100); 
+        });
+
+        // Dapatkan wadah berita samping
+        const sideNewsWrapper = document.querySelector('.side-news-wrapper');
+
+        // Dapatkan tombol panah
+        const leftArrow = document.querySelector('.left-arrow');
+        const rightArrow = document.querySelector('.right-arrow');
+
+        // Lebar pergeseran (setara dengan lebar satu card samping)
+        const scrollStep = document.querySelector('.side-card').offsetWidth + 10; // 10px adalah gap
+
+        // Fungsi untuk scroll ke kiri
+        leftArrow.addEventListener('click', () => {
+            sideNewsWrapper.scrollBy({
+                left: -scrollStep, // Geser ke kiri
+                behavior: 'smooth'
+            });
+        });
+
+        // Fungsi untuk scroll ke kanan
+        rightArrow.addEventListener('click', () => {
+            sideNewsWrapper.scrollBy({
+                left: scrollStep, // Geser ke kanan
+                behavior: 'smooth'
+            });
+        });
+
+
+        // --- JAVASCRIPT DASAR (Hanya untuk interaksi frontend) ---
+        
+        // Contoh: Log pesan ketika tombol Pengaduan diklik (fungsi sebenarnya memerlukan backend)
+        document.querySelector('.btn-pengaduan').addEventListener('click', function(e) {
+            e.preventDefault(); 
+            console.log("Tombol Buat Pengaduan diklik. Siap untuk halaman form pengaduan.");
+            alert("Ini adalah kloning tampilan. Fungsi pengaduan memerlukan program server (backend) untuk menyimpan data.");
+        });
+
+        // Contoh: Log pesan ketika kartu modul diklik
+        document.querySelectorAll('.module-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const moduleName = this.querySelector('span').textContent;
+                console.log(`Modul ${moduleName} diklik.`);
+            });
+        });
+        
+        // --- JAVASCRIPT BARU UNTUK CAROUSEL STRUKTUR ORGANISASI ---
+        function scrollCarousel(direction) {
+            const carousel = document.getElementById('aparaturCarousel');
+            const scrollAmount = 250; // Jarak scroll per klik (lebar kartu + gap)
+
+            if (carousel) {
+                if (direction === 1) {
+                    carousel.scrollLeft += scrollAmount;
+                } else if (direction === -1) {
+                    carousel.scrollLeft -= scrollAmount;
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desa Template</title>
+    <!-- 添加Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* ===================================================================
+           A. CSS GLOBAL & RESET
+           =================================================================== */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        /* ===================================================================
+           B. HEADER (NAVBAR)
+           =================================================================== */
+        .main-header {
+            background-color: #25d366;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            position: relative;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo {
+            font-size: 1.5em;
+            font-weight: 800;
+            color: #f99d50;
+            margin-right: 20px;
+        }
+
+        .logo-dot {
+            color: #333;
+        }
+
+        .contact-info {
+            font-size: 0.9em;
+            color: #555;
+            display: none;
+        }
+
+        .main-nav ul {
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-nav li a {
+            padding: 10px 15px;
+            display: block;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .main-nav li a:hover {
+            color: #f99d50;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .social-icons a {
+            font-size: 1.2em;
+            margin-left: 10px;
+            color: #555;
+        }
+
+        .social-icons .wa {
+            color: #25d366;
+        }
+
+        .btn-pengaduan {
+            background-color: #38c172;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-pengaduan:hover {
+            background-color: #2da85f;
+        }
+        
+        /* Mobile menu toggle - 汉堡菜单按钮 */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            z-index: 1000;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .mobile-menu-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===================================================================
+           C. MAIN LAYOUT (GRID)
+           =================================================================== */
+        .main-content-wrapper {
+            max-width: 1200px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 300px 1fr; /* Sidebar 300px, Konten Utama sisa ruang */
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .main-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Search Bar */
+        .search-box {
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            display: flex;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .search-box input {
+            border: none;
+            padding: 10px;
+            flex-grow: 1;
+            outline: none;
+        }
+
+        .search-box button {
+            background-color: #f99d50;
+            color: white;
+            border: none;
+            padding: 0 15px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+
+        /* ===================================================================
+           D. SIDEBAR COMPONENTS
+           =================================================================== */
+        .sidebar-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            padding: 15px;
+        }
+
+        .card-header {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #f99d50;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        /* Pengumuman */
+        .announcement-item {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            display: flex;
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .announcement-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .announcement-body {
+            padding: 10px;
+        }
+
+        .announcement-title {
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .announcement-date {
+            font-size: 0.8em;
+            color: #999;
+        }
+        
+        .announcement-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.6); /* Overlay putih agar teks lebih jelas */
+            z-index: 1;
+        }
+        
+        .announcement-body, .announcement-image {
+            z-index: 2;
+        }
+
+
+        /* Aparatur Desa */
+        .official-card {
+            text-align: center;
+        }
+        
+        .official-card .card-header {
+            margin-bottom: 5px;
+        }
+
+        .official-image-wrapper {
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .official-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .official-name {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .official-title {
+            font-size: 0.9em;
+            color: #f99d50;
+        }
+
+        /* Data Penduduk */
+        .population-data {
+            text-align: center;
+        }
+
+        .pie-chart-container {
+            width: 180px;
+            height: 180px;
+            margin: 15px auto;
+            position: relative;
+            border-radius: 50%;
+            /* Properti untuk membuat pie chart dari div */
+            background-image: conic-gradient(
+                #ff69b4 0,          /* Pink (Perempuan) dari 0 */
+                #ff69b4 30%,        /* Sampai 30% */
+                #4169e1 30%,        /* Biru (Laki-laki) mulai dari 30% */
+                #4169e1 100%        /* Sampai 100% */
+            );
+        }
+
+        /* Label di bawah chart */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 0.8em;
+            margin-top: 10px;
+        }
+
+        .legend-item::before {
+            content: "•";
+            font-size: 1.5em;
+            margin-right: 5px;
+            line-height: 0;
+            vertical-align: middle;
+        }
+
+        .legend-item.male::before { color: #4169e1; }
+        .legend-item.female::before { color: #ff69b4; }
+
+        .total-population {
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        /* ===================================================================
+           E. MAIN CONTENT (FOTO KEGIATAN DESA)
+           =================================================================== */
+        .gallery-header {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: zoom-in;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* ===================================================================
+           F. FOOTER
+           =================================================================== */
+        .main-footer {
+            background-color: #4a4a4a;
+            color: white;
+            padding: 40px 20px 10px;
+            margin-top: 30px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
+        }
+
+        .footer-col {
+            padding: 0 10px;
+        }
+
+        .brand-info { flex-basis: 35%; }
+        .menu-links, .contact-info { flex-basis: 25%; }
+
+        .footer-logo-text {
+            font-size: 2em;
+            font-weight: 800;
+            color: #f99d50;
+            margin-bottom: 5px;
+        }
+        
+        .footer-logo-text .dot-footer { color: white; }
+
+        .brand-text { font-size: 0.9em; color: #ccc; margin-bottom: 10px; }
+
+        .playstore-badge { width: 150px; height: auto; display: block; margin-bottom: 20px; }
+
+        .footer-col h3 {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #f99d50;
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .menu-links ul { list-style: none; padding: 0; }
+        .menu-links li { margin-bottom: 8px; }
+        
+        .menu-links a { text-decoration: none; color: #ccc; font-size: 0.9em; transition: color 0.3s; }
+        .menu-links a:hover { color: #f99d50; }
+
+        .list-icon { margin-right: 8px; color: #38c172; }
+
+        .social-icons-footer { margin-bottom: 15px; display: flex; gap: 10px; }
+
+        .social-icons-footer a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            background-color: #38c172;
+            color: white;
+            border-radius: 4px;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .social-icons-footer a:hover {
+            background-color: #2da85f;
+        }
+
+        .contact-detail { font-size: 0.9em; color: #ccc; margin-bottom: 5px; }
+
+        .detail-label { font-weight: bold; color: white; margin-right: 5px; }
+
+        .copyright-info {
+            font-size: 0.7em;
+            color: #888;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .geodesa-link { color: #f99d50; font-weight: bold; }
+        
+        /* ===================================================================
+           G. MODAL GALERI (untuk efek zoom)
+           =================================================================== */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .modal-content { 
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+
+        @keyframes zoom {
+            from {transform:scale(0)} 
+            to {transform:scale(1)}
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* ===================================================================
+           H. RESPONSIVE DESIGN
+           =================================================================== */
+        @media (max-width: 992px) {
+            .main-header {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            .header-left {
+                width: 100%;
+                justify-content: space-between;
+                margin-bottom: 10px;
+            }
+            
+            .contact-info {
+                display: block;
+            }
+            
+            .main-nav {
+                width: 100%;
+            }
+            
+            .main-nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .header-right {
+                display: none;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 10px 15px;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header-logo {
+                font-size: 1.3em;
+                margin-bottom: 5px;
+            }
+            
+            .contact-info {
+                font-size: 0.8em;
+            }
+            
+            /* 显示汉堡菜单按钮 */
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .main-nav {
+                display: none;
+                width: 100%;
+                margin-top: 10px;
+                background-color: rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                padding: 10px;
+            }
+            
+            .main-nav.active {
+                display: block;
+            }
+            
+            .main-nav ul {
+                flex-direction: column;
+            }
+            
+            .main-nav li {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .main-nav li:last-child {
+                border-bottom: none;
+            }
+            
+            .main-nav li a {
+                padding: 10px 0;
+            }
+            
+            .main-content-wrapper {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 0 15px;
+            }
+            
+            .sidebar {
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+                padding: 15px;
+            }
+            
+            .gallery-header {
+                font-size: 1.3em;
+                margin-bottom: 15px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .gallery-item img {
+                height: 150px;
+            }
+            
+            .card-header {
+                font-size: 1.1em;
+            }
+            
+            .announcement-image {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .pie-chart-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .footer-container {
+                flex-direction: column;
+            }
+            
+            .brand-info, .menu-links, .contact-info {
+                flex-basis: 100%;
+                margin-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-item img {
+                height: 200px;
+            }
+            
+            .announcement-item {
+                flex-direction: column;
+            }
+            
+            .announcement-image {
+                width: 100%;
+                height: 120px;
+            }
+            
+            .official-image {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-left">
+            <div class="header-logo">GEODES<span class="logo-dot">A</span>.ID</div>
+            <div class="contact-info">
+                <span><i class="fas fa-phone"></i> GEODESA.id</span> |
+                <span><i class="fab fa-whatsapp"></i> +62 82345xxxxx</span>
+            </div>
+            <!-- 汉堡菜单按钮 -->
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html">🏠 Profile Desa</a></li>
+                <li><a href="h.html">📝 Informasi Desa</a></li>
+                <li><a href="data-statistik.html">📊 Data Statistik</a></li>
+                <li><a href="peta.html">📞 Kontak</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-right">
+            <a href="#" class="btn-pengaduan">Buat Pengaduan</a>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        
+        <aside class="sidebar">
+            
+            <div class="search-box">
+                <input type="text" placeholder="Search...">
+                <button type="submit">🔍</button>
+            </div>
+            
+            <div class="sidebar-card">
+                <h2 class="card-header">Pengumuman</h2>
+                <div class="announcement-item">
+                    <img src="https://via.placeholder.com/100x100?text=Pengumuman" alt="Gambar Pengumuman" class="announcement-image">
+                    <div class="announcement-body">
+                        <p class="announcement-title">Pengumuman #1</p>
+                        <p class="announcement-date">🗓️ 2023-08-16 10:00</p>
+                    </div>
+                </div>
+                <div class="announcement-item">
+                    <img src="https://via.placeholder.com/100x100?text=Pengumuman" alt="Gambar Pengumuman" class="announcement-image">
+                    <div class="announcement-body">
+                        <p class="announcement-title">Pengumuman #2</p>
+                        <p class="announcement-date">🗓️ 2023-08-10 14:30</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-card official-card">
+                <h2 class="card-header">Aparatur Desa</h2>
+                <div class="official-image-wrapper">
+                    <img src="https://via.placeholder.com/300x400?text=Syifa+Azzahra" alt="Foto Syifa Azzahra" class="official-image">
+                </div>
+                <p class="official-name">Syifa Azzahra</p>
+                <p class="official-title">Kasi Pelayanan</p>
+            </div>
+
+            <div class="sidebar-card population-data">
+                <h2 class="card-header">Data Penduduk Desa</h2>
+                <div class="pie-chart-container"></div>
+                <div class="legend">
+                    <span class="legend-item male">Laki-Laki</span>
+                    <span class="legend-item female">Perempuan</span>
+                </div>
+                <p class="total-population">Total Penduduk: 350</p>
+            </div>
+            
+        </aside>
+        
+        <main class="main-content">
+            <h1 class="gallery-header">Foto Kegiatan Desa</h1>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item"><img src="https://via.placeholder.com/300x200?text=Kegiatan+1" alt="Kegiatan Desa 1"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/300x200?text=Kegiatan+2" alt="Kegiatan Desa 2"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/300x200?text=Kegiatan+3" alt="Kegiatan Desa 3"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/300x200?text=Kegiatan+4" alt="Kegiatan Desa 4"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/300x200?text=Kegiatan+5" alt="Kegiatan Desa 5"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/300x200?text=Kegiatan+6" alt="Kegiatan Desa 6"></div>
+                </div>
+        </main>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+    </div>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-col brand-info">
+                <div class="footer-logo-text">GEODES<span class="dot-footer">A</span>.ID</div>
+                <p class="brand-text">RRDesa Template</p>
+                <a href="#">
+                    <img src="https://via.placeholder.com/150x50?text=Google+Play" alt="Tersedia di Google Play" class="playstore-badge">
+                </a>
+            </div>
+
+            <div class="footer-col menu-links">
+                <h3>Menu Lainnya</h3>
+                <ul>
+                    <li><a href="#"><span class="list-icon">•</span> Pengumuman</a></li>
+                    <li><a href="#"><span class="list-icon">•</span> Visi & Misi</a></li>
+                    <li><a href="#"><span class="list-icon">•</span> Sejarah Desa</a></li>
+                    <li><a href="#"><span class="list-icon">•</span> Aparatur Desa</a></li>
+                    <li><a href="#"><span class="list-icon">•</span> Produk Desa</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col contact-info">
+                <h3>Hubungi Kami</h3>
+                <div class="social-icons-footer">
+                    <a href="#" class="social-icon">▶️</a> 
+                    <a href="#" class="social-icon">📸</a> 
+                    <a href="#" class="social-icon">🐦</a>
+                </div>
+                <p class="contact-detail"><span class="detail-label">Email :</span> geodesa.id</p>
+                <p class="contact-detail"><span class="detail-label">WA :</span> +62 82345xxxxx</p>
+            </div>
+        </div>
+        <div class="copyright-info">
+            RRDesa Template © All rights reserved | Made with ❤️ by <span class="geodesa-link">GEODESA.ID</span>
+        </div>
+    </footer>
+
+    <script>
+        // 移动菜单切换功能
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const mainNav = document.querySelector('.main-nav');
+        
+        mobileMenuToggle.addEventListener('click', function() {
+            mainNav.classList.toggle('active');
+        });
+        
+        // 点击页面其他地方关闭菜单
+        document.addEventListener('click', function(event) {
+            const isClickInsideNav = mainNav.contains(event.target);
+            const isClickOnToggle = mobileMenuToggle.contains(event.target);
+            
+            if (!isClickInsideNav && !isClickOnToggle && mainNav.classList.contains('active')) {
+                mainNav.classList.remove('active');
+            }
+        });
+        
+        // 获取模态框元素
+        var modal = document.getElementById("imageModal");
+        var modalImg = document.getElementById("img01");
+        var galleryItems = document.querySelectorAll(".gallery-item img");
+        var span = document.getElementsByClassName("close")[0];
+
+        // 循环遍历所有画廊图片
+        galleryItems.forEach(item => {
+            item.onclick = function() {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+            }
+        });
+
+        // 当用户点击 (x), 关闭模态框
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        // 当用户点击模态框外部, 关闭模态框
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>

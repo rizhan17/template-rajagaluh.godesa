@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pengaduan Desa | G-EDESA.ID</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        /* ==================================================================== */
+        /* CSS STYLING LENGKAP                         */
+        /* ==================================================================== */
+        :root {
+            --primary: #1fb97a; /* Hijau Utama */
+            --bg: #ffffff;      /* Latar belakang halaman putih bersih */
+            --card: #ffffff;
+            --muted: #7b8a90;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #21333a;
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* --- Topbar/Kontak Atas --- */
+        .top-info {
+            background-color: var(--card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px 0;
+            text-align: right;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+        .top-info a {
+            color: var(--muted);
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        .top-info a:hover {
+            color: var(--primary);
+        }
+        .top-info i {
+            color: var(--primary);
+            margin-right: 3px;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            background-color: var(--card);
+            border-bottom: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .navbar-brand-custom { 
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 30px;
+        }
+        .navbar .nav-link {
+            color: #21333a;
+            font-weight: 500;
+        }
+        .navbar .nav-link:hover {
+            color: var(--primary);
+        }
+        .navbar .nav-link.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .navbar .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 6px 14px;
+            font-size: 0.95rem;
+        }
+
+        /* --- Konten Utama Header --- */
+        .page-header {
+            padding-top: 30px;
+            padding-bottom: 50px;
+        }
+        .page-header h2 {
+            font-weight: 600;
+            font-size: 1.75rem;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+            color: #21333a;
+        }
+
+        /* --- Kartu Pengaduan (Complaint Card) --- */
+        .complaint-card {
+            background-color: var(--card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px 20px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .complaint-card h6 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary); /* ID Pengaduan berwarna hijau */
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        .complaint-card p.issue-summary {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+        .complaint-card .details-row {
+            font-size: 0.85rem;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .complaint-card .label {
+            font-weight: 600;
+            color: #21333a; /* Label "Pelapor:" lebih gelap */
+            margin-right: 5px;
+        }
+        .btn-bukti {
+            background-color: #f7e0d0;
+            color: #d9822b;
+            border: none;
+            border-radius: 30px;
+            padding: 5px 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .rrdesa-bg {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #e9ecef;
+            opacity: 0.7;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* --- CTA Pengaduan Bawah --- */
+        .cta-pengaduan {
+            background: linear-gradient(90deg, #1fb97a, #0fa563);
+            color: #fff;
+            padding: 40px 50px;
+            border-radius: 14px;
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-pengaduan h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .cta-pengaduan p {
+            font-size: 1.05rem;
+            color: #f0fff0;
+            line-height: 1.5;
+        }
+        .cta-pengaduan .btn-light {
+            color: var(--primary);
+            font-weight: 700;
+            border-radius: 8px;
+            padding: 10px 25px;
+        }
+        .cta-illustration {
+            position: absolute;
+            right: 0;
+            opacity: 0.7;
+            height: 100%;
+            width: 200px;
+            /* Menggunakan SVG placeholder sederhana */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='50%25' x='50%25' dominant-baseline='middle' text-anchor='middle' font-size='30' fill='%23ffffff'%3E%E2%9C%8D%EF%B8%8F%3C/text%3E%3C/svg%3E"); 
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: right center;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #21333a;
+            color: #fff;
+            padding: 50px 0 10px;
+            margin-top: 50px;
+        }
+        footer h5 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        footer ul {
+            list-style: none;
+            padding: 0;
+        }
+        footer ul li a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            padding: 4px 0;
+            font-size: 0.9rem;
+        }
+        footer .footer-bottom {
+            border-top: 1px solid #3e4c51;
+            padding-top: 15px;
+            margin-top: 30px;
+            font-size: 0.8rem;
+            text-align: center;
+            color: #aaa;
+        }
+
+        /* --- Responsiveness --- */
+        @media (max-width: 991px) {
+             .navbar-brand-custom { margin-right: 10px; font-size: 1.5rem; }
+             .navbar-collapse { text-align: center; margin-top: 10px; }
+        }
+        
+        /* Mobile-specific styles to match the screenshot */
+        @media (max-width: 767px) {
+            /* Topbar adjustments */
+            .top-info {
+                display: none !important;
+            }
+            
+            /* Navigation adjustments */
+            .navbar {
+                padding: 10px 15px;
+            }
+            
+            .navbar-brand-custom {
+                font-size: 1.5rem;
+                margin-right: 10px;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                padding: 0;
+            }
+            
+            .navbar-toggler-icon {
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2321333a' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            }
+            
+            .navbar-collapse {
+                background-color: #fff;
+                padding: 15px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                margin-top: 15px;
+            }
+            
+            .navbar-nav {
+                margin-right: 0;
+            }
+            
+            .nav-item {
+                margin-bottom: 10px;
+                border-bottom: 1px solid #f0f0f0;
+                padding-bottom: 10px;
+            }
+            
+            .nav-item:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+                margin-bottom: 0;
+            }
+            
+            .nav-link {
+                font-size: 1rem;
+                padding: 5px 0;
+            }
+            
+            .btn-primary {
+                display: block;
+                width: 100%;
+                margin-top: 15px;
+                padding: 10px;
+            }
+            
+            /* Page header adjustments */
+            .page-header {
+                padding-top: 20px;
+                padding-bottom: 30px;
+            }
+            
+            .page-header h2 {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+                padding-left: 12px;
+            }
+            
+            /* Complaint cards adjustments */
+            .complaint-card {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .complaint-card h6 {
+                font-size: 1rem;
+                margin-bottom: 6px;
+            }
+            
+            .complaint-card p.issue-summary {
+                font-size: 0.95rem;
+                margin-bottom: 10px;
+            }
+            
+            .complaint-card .details-row {
+                font-size: 0.8rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .btn-bukti {
+                margin-top: 8px;
+                padding: 4px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .rrdesa-bg {
+                font-size: 2rem;
+                top: 8px;
+                right: 10px;
+            }
+            
+            /* CTA section adjustments */
+            .cta-pengaduan {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px 20px;
+                margin-top: 30px;
+            }
+            
+            .cta-pengaduan h3 {
+                font-size: 1.4rem;
+                margin-bottom: 8px;
+            }
+            
+            .cta-pengaduan p {
+                font-size: 0.95rem;
+                margin-bottom: 15px;
+            }
+            
+            .cta-pengaduan .btn-light {
+                margin-top: 15px;
+                padding: 8px 20px;
+            }
+            
+            .cta-illustration {
+                display: none;
+            }
+            
+            /* Footer adjustments */
+            footer {
+                padding: 30px 0 10px;
+                margin-top: 30px;
+            }
+            
+            footer h5 {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+            
+            footer ul li a {
+                font-size: 0.85rem;
+                padding: 3px 0;
+            }
+            
+            .footer-bottom {
+                font-size: 0.75rem;
+                padding-top: 10px;
+                margin-top: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* Even smaller adjustments for very small screens */
+            .page-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .complaint-card {
+                padding: 12px;
+            }
+            
+            .complaint-card h6 {
+                font-size: 0.9rem;
+            }
+            
+            .complaint-card p.issue-summary {
+                font-size: 0.9rem;
+            }
+            
+            .complaint-card .details-row {
+                font-size: 0.75rem;
+            }
+            
+            .btn-bukti {
+                font-size: 0.75rem;
+                padding: 3px 10px;
+            }
+            
+            .rrdesa-bg {
+                font-size: 1.8rem;
+            }
+            
+            .cta-pengaduan {
+                padding: 25px 15px;
+            }
+            
+            .cta-pengaduan h3 {
+                font-size: 1.2rem;
+            }
+            
+            .cta-pengaduan p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-info d-none d-lg-block">
+        <div class="container">
+            <span><i class="fa-brands fa-whatsapp"></i> +62 82345xxxxxx</span>
+            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand-custom" href="#"><span class="text-primary me-1">G</span>EDESA.ID</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Profile Desa</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="h.html">Informasi Desa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="data-statistik.html">Data Statistik</a></li>
+                    <li class="nav-item"><a class="nav-link" href="peta.html">Kontak</a></li>
+                </ul>
+                <a href="#" class="btn btn-primary d-none d-lg-block">BUAT PENGADUAN</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container page-header">
+        <h2>Pengaduan Via Website</h2>
+        
+        <div class="row" id="complaint-list">
+            </div>
+
+        <div class="cta-pengaduan">
+            <div>
+                <h3 class="text-white">Pengaduan Desa</h3>
+                <p>Apabila Anda memiliki Keluhan Dan Permasalahan bisa klik tombol di bawah ini!</p>
+                <p class="text-white-50 small">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed egestas felis nec massa ornare blandit.</p>
+                <a href="#" class="btn btn-light mt-3"><i class="fa-solid fa-pen-to-square me-2"></i>Buat Pengaduan</a>
+            </div>
+            <div class="cta-illustration"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <a class="navbar-brand-custom text-white" href="#"><span class="text-primary me-1">G</span>EDESA.ID</a>
+                    <p class="text-muted small">GEODESA.ID</p>
+                    <a href="#" class="d-block mt-3"><img src="https://via.placeholder.com/150x50/3e4c51/ffffff?text=Tersedia+di+Google+Play" alt="Google Play" class="img-fluid" style="border-radius: 4px;"></a>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Menu Lainnya</h5>
+                    <ul>
+                        <li><a href="#"><i class="fa-solid fa-circle me-2" style="font-size: 7px;"></i>Pengumuman</a></li>
+                        <li><a href="#"><i class="fa-solid fa-circle me-2" style="font-size: 7px;"></i>Visi & Misi</a></li>
+                        <li><a href="#"><i class="fa-solid fa-circle me-2" style="font-size: 7px;"></i>Sejarah Desa</a></li>
+                        <li><a href="#"><i class="fa-solid fa-circle me-2" style="font-size: 7px;"></i>Aparatur Desa</a></li>
+                        <li><a href="#"><i class="fa-solid fa-circle me-2" style="font-size: 7px;"></i>Produk Desa</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Hubungi Kami</h5>
+                    <p><i class="fa-solid fa-envelope me-2 text-white"></i> Email: geodesa.id</p>
+                    <p><i class="fa-brands fa-whatsapp me-2 text-white"></i> WA: +62 82345xxxxxx</p>
+                    <div class="social-icons pt-2">
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom text-center">
+                RRDesa Template © All rights reserved. | Made with <i class="fa-solid fa-heart text-danger"></i> by GEODESA.ID
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data Dummy Pengaduan
+        const complaints = [
+            { id: 1538, summary: "Tolong kirim bantuan", pelapor: "Disa", date: "March 20, 2025", time: "12:17 AM" },
+            { id: 1535, summary: "Apakah harga bisa nego ?", pelapor: "Kang Lapor", date: "January 24, 2025", time: "2:21 AM" },
+            { id: 1534, summary: "Apakah harga bisa nego ?", pelapor: "Kang Lapor", date: "January 24, 2025", time: "2:21 AM" },
+            { id: 1531, summary: "mohon informasi detail", pelapor: "Risma, S.Pt.", date: "December 11, 2024", time: "11:56 PM" },
+            { id: 1529, summary: "haiiii", pelapor: "dogefla", date: "December 1, 2024", time: "3:09 PM" },
+            { id: 1528, summary: "haiiii", pelapor: "dogefla", date: "December 1, 2024", time: "3:09 PM" },
+        ];
+
+        const complaintList = document.getElementById('complaint-list');
+
+        // Fungsi untuk membuat dan menambahkan kartu pengaduan
+        function renderComplaints() {
+            complaintList.innerHTML = ''; // Kosongkan daftar sebelum mengisi
+
+            complaints.forEach(complaint => {
+                const cardHTML = `
+                    <div class="col-md-6">
+                        <div class="complaint-card">
+                            <div class="rrdesa-bg">RRDesa.</div>
+                            <h6 class="text-secondary">Pengaduan #${complaint.id}</h6>
+                            <p class="issue-summary">${complaint.summary}</p>
+                            <div class="details-row mb-1">
+                                <span><span class="label">Pelapor:</span> ${complaint.pelapor}</span>
+                                <a href="#" class="btn-bukti">
+                                    <i class="fa-solid fa-box-open me-2"></i>Bukti
+                                </a>
+                            </div>
+                            <div class="details-row">
+                                <span class="text-muted">${complaint.date} ${complaint.time}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                complaintList.innerHTML += cardHTML;
+            });
+        }
+
+        // Jalankan fungsi rendering saat halaman dimuat
+        renderComplaints();
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
