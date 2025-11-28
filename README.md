@@ -1,2 +1,0 @@
-# template-rajagaluh.godesa
-web
